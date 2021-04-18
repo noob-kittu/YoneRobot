@@ -23,7 +23,10 @@ The easiest way to deploy this Bot
  
 CREDITS
 ```
-❤️ MashaRobot = Dark Prince
+❤️ MashaRobot = Dark Prince 
+❤️ DaisyX = Inuka 
+
+
 
 
 ```
