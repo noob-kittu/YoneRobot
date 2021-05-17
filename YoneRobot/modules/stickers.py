@@ -462,9 +462,9 @@ __mod_name__ = "Stickers"
 STICKERID_HANDLER = DisableAbleCommandHandler("stickerid", stickerid)
 GETSTICKER_HANDLER = DisableAbleCommandHandler("getsticker", getsticker)
 KANG_HANDLER = DisableAbleCommandHandler("kang", kang, admin_ok=True)
-# STICKERS_HANDLER = DisableAbleCommandHandler("stickers", cb_sticker)
+STICKERS_HANDLER = DisableAbleCommandHandler("stickers", cb_sticker)
 
-# dispatcher.add_handler(STICKERS_HANDLER)
+dispatcher.add_handler(STICKERS_HANDLER)
 dispatcher.add_handler(STICKERID_HANDLER)
 dispatcher.add_handler(GETSTICKER_HANDLER)
 dispatcher.add_handler(KANG_HANDLER)
