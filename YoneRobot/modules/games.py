@@ -1,0 +1,73 @@
+from telethon.tl.types import InputMediaDice
+
+from YoneRobot.events import register
+
+
+@register(pattern="^/dice(?: |$)(.*)")
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    r = await event.reply(file=InputMediaDice(""))
+    if input_str > 6:
+        await event.reply("hey nigga use number 1 to 6 only")
+    
+    else:
+        try:
+            required_number = int(input_str)
+            while r.media.value != required_number:
+                await r.delete()
+                r = await event.reply(file=InputMediaDice(""))
+        except BaseException:
+            pass
+
+
+@register(pattern="^/dart(?: |$)(.*)")
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    r = await event.reply(file=InputMediaDice("🎯"))
+    if input_str > 5:
+        await event.reply("hey nigga use number 1 to 6 only")
+    
+    else:
+        try:
+            required_number = int(input_str)
+            while r.media.value != required_number:
+                await r.delete()
+                r = await event.reply(file=InputMediaDice("🎯"))
+        except BaseException:
+            pass
+
+
+@register(pattern="^/ball(?: |$)(.*)")
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    r = await event.reply(file=InputMediaDice("🏀"))
+    if input_str > 6:
+        await event.reply("hey nigga use number 1 to 6 only")
+    
+    else:
+        try:
+            required_number = int(input_str)
+            while r.media.value != required_number:
+                await r.delete()
+                r = await event.reply(file=InputMediaDice("🏀"))
+        except BaseException:
+            pass
+
+
+
+__help__ = """
+ *Play Game With Emojis:*
+  - /dice or /dice 1 to 6 any value
+  - /ball or /ball 1 to 5 any value
+  - /dart or /dart 1 to 6 any value
+ Usage: hahaha just a magic.
+ warning: you would be in trouble if you input any other value than mentioned.
+"""
+
+__mod_name__ = "Games"

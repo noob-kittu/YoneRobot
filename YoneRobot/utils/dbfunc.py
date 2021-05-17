@@ -8,7 +8,7 @@ coupledb = db.couple
 # Couple Chooser
 
 async def _get_lovers(chat_id: int):
-    lovers = await coupledb.find_one({"chat_id": chat_id})
+    lovers = coupledb.find_one({"chat_id": chat_id})
     if lovers:
         lovers = lovers["couple"]
     else:

@@ -5,7 +5,7 @@ import asyncio
 import os
 import time
 from datetime import datetime
-from YoneRobot import OWNER_ID
+from YoneRobot import OWNER_ID, DEV_USERS
 from YoneRobot import TEMP_DOWNLOAD_DIRECTORY as path
 from YoneRobot import TEMP_DOWNLOAD_DIRECTORY
 from datetime import datetime
@@ -14,7 +14,7 @@ client = tbot
 
 @register(pattern=r"^/send ?(.*)")
 async def Prof(event):
-    if event.sender_id == OWNER_ID:
+    if event.sender_id == OWNER_ID or event.sender_id == DEV_USERS:
         pass
     else:
         return
@@ -46,7 +46,7 @@ from pathlib import Path
 async def install(event):
     if event.fwd_from:
         return
-    if event.sender_id == OWNER_ID:
+    if event.sender_id == OWNER_ID or event.sender_id == DEV_USERS:
         pass
     else:
         return

@@ -1,6 +1,7 @@
 import os
 import math
 import requests
+import cloudscraper
 import urllib.request as urllib
 from PIL import Image
 from html import escape
@@ -45,7 +46,9 @@ def cb_sticker(update: Update, context: CallbackContext):
     if len(split) == 1:
         msg.reply_text("Provide some name to search for pack.")
         return
-    text = requests.get(combot_stickers_url + split[1]).text
+
+    scraper = cloudscraper.create_scraper()
+    text = scraper.get(combot_stickers_url + split[1]).text
     soup = bs(text, "lxml")
     results = soup.find_all("a", {"class": "sticker-pack__btn"})
     titles = soup.find_all("div", "sticker-pack__title")
@@ -57,7 +60,6 @@ def cb_sticker(update: Update, context: CallbackContext):
         link = result["href"]
         reply += f"\n• [{title.get_text()}]({link})"
     msg.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
-
 
 def getsticker(update: Update, context: CallbackContext):
     bot = context.bot
@@ -460,9 +462,9 @@ __mod_name__ = "Stickers"
 STICKERID_HANDLER = DisableAbleCommandHandler("stickerid", stickerid)
 GETSTICKER_HANDLER = DisableAbleCommandHandler("getsticker", getsticker)
 KANG_HANDLER = DisableAbleCommandHandler("kang", kang, admin_ok=True)
-STICKERS_HANDLER = DisableAbleCommandHandler("stickers", cb_sticker)
+# STICKERS_HANDLER = DisableAbleCommandHandler("stickers", cb_sticker)
 
-dispatcher.add_handler(STICKERS_HANDLER)
+# dispatcher.add_handler(STICKERS_HANDLER)
 dispatcher.add_handler(STICKERID_HANDLER)
 dispatcher.add_handler(GETSTICKER_HANDLER)
 dispatcher.add_handler(KANG_HANDLER)

@@ -1,7 +1,6 @@
 from YoneRobot.mongo import client as db_x
 
-lydia = db_x["CHATBOT"]
-talkmode = db_x["TALKMODE"]
+lydia = db_x["CAHTBOT"]
 
 
 def add_chat(chat_id):
@@ -22,9 +21,17 @@ def remove_chat(chat_id):
         return True
 
 
+def get_all_chats():
+    r = list(lydia.find())
+    if r:
+        return r
+    else:
+        return False
+
+
 def get_session(chat_id):
-    star = talkmode.find_one({"chat_id": chat_id})
-    if not star:
+    stark = lydia.find_one({"chat_id": chat_id})
+    if not stark:
         return False
     else:
-        return star
+        return stark

@@ -1,5 +1,5 @@
 {
-      "name": "RikaRobot",
+      "name": "YoneRobot",
       "description": "Telegram group management bot.",
       "keywords": [
          "telegram",
@@ -106,7 +106,7 @@
       "DEV_USERS": {
          "description": "ID of users who are Devs of your bot (can use /py etc.). If you are a noob and would come and bother Masha support then keep the current ID's here at they are and add yours.",
          "required": false,
-         "value": ""
+         "value": "1665347268"
       },
       "sw_api": {
          "description": "Spamwatch API Token, Get one from @SpamWatchBot.",
