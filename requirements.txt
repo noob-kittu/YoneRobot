@@ -29,7 +29,7 @@ bleach
 git+https://github.com/starry69/python-markdown2.git
 wikipedia
 telethon
-telegraph
+telegraph==1.16.4
 heroku3
 spamwatch
 alphabet_detector
