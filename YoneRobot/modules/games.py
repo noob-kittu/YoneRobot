@@ -9,12 +9,13 @@ async def _(event):
         return
     input_str = event.pattern_match.group(1)
     r = await event.reply(file=InputMediaDice(""))
-    if input_str > 6:
+    input_int = int(input_str)
+    if input_int > 6:
         await event.reply("hey nigga use number 1 to 6 only")
     
     else:
         try:
-            required_number = int(input_str)
+            required_number = input_int
             while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice(""))
@@ -28,12 +29,13 @@ async def _(event):
         return
     input_str = event.pattern_match.group(1)
     r = await event.reply(file=InputMediaDice("🎯"))
-    if input_str > 5:
+    input_int = int(input_str)
+    if input_int > 6:
         await event.reply("hey nigga use number 1 to 6 only")
     
     else:
         try:
-            required_number = int(input_str)
+            required_number = input_int
             while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice("🎯"))
@@ -47,12 +49,13 @@ async def _(event):
         return
     input_str = event.pattern_match.group(1)
     r = await event.reply(file=InputMediaDice("🏀"))
-    if input_str > 6:
+    input_int = int(input_str)
+    if input_int > 5:
         await event.reply("hey nigga use number 1 to 6 only")
     
     else:
         try:
-            required_number = int(input_str)
+            required_number = input_int
             while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice("🏀"))
