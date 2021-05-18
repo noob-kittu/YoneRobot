@@ -65,3 +65,4 @@ textblob
 nudepy
 
 motor
+cloudscraper
