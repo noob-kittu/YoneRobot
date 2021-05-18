@@ -28,8 +28,8 @@ regex
 bleach
 git+https://github.com/starry69/python-markdown2.git
 wikipedia
-telethon
-telegraph==1.16.4
+telethon==1.16.4
+telegraph
 heroku3
 spamwatch
 alphabet_detector
