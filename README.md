@@ -24,7 +24,10 @@ The easiest way to deploy this Bot
 CREDITS
 ```
 ❤️ MashaRobot = Dark Prince 
-❤️ DaisyX = Inuka 
+❤️ DaisyX = Inuka
+❤️ TheHamkerCat = WBB
+
+This Bot Is Created By @A_Viyu ! if your kanging this without fork at least give a credit to get a smile of my hard work.
 
 
 
