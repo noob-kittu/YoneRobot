@@ -4,7 +4,6 @@ from pyrogram import filters
 import random
 from datetime import datetime
 
-
 # Date and time
 def dt():
     now = datetime.now()
@@ -71,15 +70,14 @@ __New couple of the day may be chosen at 12AM {tomorrow}__"""
                 message.chat.id,
                 text=couple_selection_message
             )
-    # except Exception as e:
-    #     print(e)
-    #     await message.reply_text(e)
+    except Exception as e:
+        print(e)
+        await message.reply_text(e)
 
 
 
 __help__ = """
  ❍ /couples - To Choose Couple Of The Day
-
  """
 __mod_name__ = "Couples"
 
