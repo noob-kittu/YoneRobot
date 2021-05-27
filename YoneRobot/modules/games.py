@@ -73,4 +73,4 @@ __help__ = """
  warning: you would be in trouble if you input any other value than mentioned.
 """
 
-__mod_name__ = "Games"
+__mod_name__ = "Game"
