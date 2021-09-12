@@ -66,3 +66,4 @@ nudepy
 
 motor
 cloudscraper
+tzlocal==2.0
