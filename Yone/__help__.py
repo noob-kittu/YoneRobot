@@ -37,13 +37,13 @@ for name in list_of_files:
         mod_paths = name
 
 mod_name = [
-        name[:-3].replace("/", ".").replace("\\", ".")
+        name[:-3].replace("/", ".")
         for name in list_of_files
         if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py")
     ]
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module(f".{mod_name}")
+    imported_module = importlib.import_module(mod_name)
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
