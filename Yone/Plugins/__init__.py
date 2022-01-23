@@ -5,17 +5,18 @@ def __list_all_modules():
     import glob
     from os.path import basename, dirname, isfile
     import os
-    path =r'Yone/Plugins/'
+    path =r'./Yone/Plugins/'
     list_of_files = []
 
     for root, dirs, files in os.walk(path):
         for file in files:
             list_of_files.append(os.path.join(root,file))
 # This generates a list of modules in this folder for the * in __help__ to work.
-    for name in list_of_files:
-        if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py"):
-            all_modules = name
-            print(name)
+    # for name in list_of_files:
+        basename(name)[:-3]
+        for name in list_of_files:
+            if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py"):
+                all_modules = name
 
     if LOAD or NO_LOAD:
         to_load = LOAD
