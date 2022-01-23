@@ -4,9 +4,16 @@ from Yone import LOAD, LOGGER, NO_LOAD
 def __list_all_modules():
     import glob
     from os.path import basename, dirname, isfile
+    import os
+    path =r'Yone/Plugins/'
+    list_of_files = []
 
-    # This generates a list of modules in this folder for the * in __help__ to work.
-    mod_paths = glob.glob(dirname(__file__) + "/*/*.py")
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            list_of_files.append(os.path.join(root,file))
+# This generates a list of modules in this folder for the * in __help__ to work.
+    for name in list_of_files:
+        mod_paths = name
     all_modules = [
         basename(f)[:-3]
         for f in mod_paths
