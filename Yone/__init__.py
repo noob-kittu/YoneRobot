@@ -44,6 +44,7 @@ if ENV:
 
     DB_URI = os.environ.get("DATABASE_URL")
     WORKERS = int(os.environ.get("WORKERS", 8))
+    ALLOW_EXCL = os.environ.get('ALLOW_EXCL', False)
 
 
 
@@ -61,6 +62,7 @@ else:
     API_HASH = Config.API_HASH
     DB_URI = Config.SQLALCHEMY_DATABASE_URI
     WORKERS = Config.WORKERS
+    ALLOW_EXCL = Config.ALLOW_EXCL
 
 
 updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
@@ -68,4 +70,3 @@ dispatcher = updater.dispatcher
 
 
 
-     
