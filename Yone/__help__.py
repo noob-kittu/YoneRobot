@@ -1,5 +1,4 @@
 import importlib, re
-from pyclbr import Function
 from Yone.Plugins import ALL_MODULES
 from Yone import dispatcher, ALLOW_EXCL, LOGGER
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
