@@ -1,6 +1,7 @@
 from math import ceil
 from typing import Dict, List
 from telegram import InlineKeyboardButton
+from Yone import NO_LOAD
 
 
 class EqInlineKeyboardButton(InlineKeyboardButton):
@@ -51,3 +52,8 @@ def paginate_modules(page_n: int, module_dict: Dict, prefix, chat=None) -> List:
         pairs += [[EqInlineKeyboardButton("Back", callback_data="yone_back")]]
 
     return pairs
+
+
+
+def is_module_loaded(name):
+    return name not in NO_LOAD
