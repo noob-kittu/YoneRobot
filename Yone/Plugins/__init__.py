@@ -5,7 +5,7 @@ def __list_all_modules():
     import glob
     from os.path import basename, dirname, isfile
     import os
-    path =r'./Yone/Plugins/'
+    path =r'Yone/Plugins/'
     list_of_files = []
 
     for root, dirs, files in os.walk(path):
