@@ -15,8 +15,7 @@ def __list_all_modules():
     # for name in list_of_files:
         basename(name)[:-3]
         for name in list_of_files:
-            if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py"):
-                all_modules = name
+            all_modules = name
 
     if LOAD or NO_LOAD:
         to_load = LOAD
