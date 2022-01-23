@@ -19,9 +19,8 @@ else:
 
 class AntiSpam:
     def __init__(self):
-        self.whitelist = (
-            (DEV_USERS or []) + (INSPECTOR or []) + (REQUESTER or [])
-        )
+        self.whitelist = (DEV_USERS or []) + (INSPECTOR or []) + (REQUESTER or [])
+    
         # Values are HIGHLY experimental, its recommended you pay attention to our commits as we will be adjusting the values over time with what suits best.
         Duration.CUSTOM = 15  # Custom duration, 15 seconds
         self.sec_limit = RequestRate(6, Duration.CUSTOM)  # 6 / Per 15 Seconds
