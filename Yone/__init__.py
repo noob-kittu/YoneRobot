@@ -49,19 +49,22 @@ if ENV:
         raise Exception("Your API_ID env variable is not a valid integer.")
 
     try:
-        HASH_API = os.environ.get("HASH_API", None)
+        API_HASH = os.environ.get("API_HASH", None)
     except ValueError:
         raise Exception("Please Add Hash Api key to start the bot")
 
     DB_URI = os.environ.get("DATABASE_URL")
     WORKERS = int(os.environ.get("WORKERS", 8))
     ALLOW_EXCL = os.environ.get('ALLOW_EXCL', False)
-    SUPPORT_CHAT = int(os.environ.get("SUPPORT_CHAT", None))
+    SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None)
 
     WEBHOOK = bool(os.environ.get("WEBHOOK", False))
     CERT_PATH = os.environ.get("CERT_PATH")
     URL = os.environ.get("URL", "")  # Does not contain token
     PORT = int(os.environ.get("PORT", 5000))
+
+    LOAD = os.environ.get("LOAD", "").split()
+    NO_LOAD = os.environ.get("NO_LOAD", "translation").split()
 
 
 
