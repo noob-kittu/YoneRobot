@@ -9,13 +9,10 @@ from telegram.utils.helpers import escape_markdown
 from Yone.Handlers.validation import is_user_admin
 from telegram.ext.dispatcher import DispatcherHandlerStop
 
-
-
 HELP_STRINGS = """Hey there! My name is *{}*.
 I'm a modular group management bot with a few fun extras! Have a look at the following for an idea of some of the things I can help you with. """.format(
     dispatcher.bot.first_name, ""
     if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
-
 
 IMPORTED = {}
 MIGRATEABLE = []
@@ -201,8 +198,6 @@ def get_help(update: Update, context: CallbackContext):
 
 
 # Settings Command Function Starting From Here 
-
-
 def send_settings(chat_id, user_id, user=False):
     if user:
         if USER_SETTINGS:
@@ -242,9 +237,6 @@ def send_settings(chat_id, user_id, user=False):
                 "in a group chat you're admin in to find its current settings!",
                 parse_mode=ParseMode.MARKDOWN,
             )
-
-
-
 
 def settings_button(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -328,9 +320,6 @@ def settings_button(update: Update, context: CallbackContext):
         ]:
             LOGGER.exception("Exception in settings buttons. %s", str(query.data))
 
-
-
-
 def get_settings(update: Update, context: CallbackContext):
     chat = update.effective_chat 
     user = update.effective_user 
@@ -360,7 +349,6 @@ def get_settings(update: Update, context: CallbackContext):
 
     else:
         send_settings(chat.id, user.id, True)
-
 
 
 def migrate_chats(update: Update, context: CallbackContext):
