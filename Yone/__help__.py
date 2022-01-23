@@ -8,6 +8,8 @@ from telegram.ext import CallbackContext
 from telegram.utils.helpers import escape_markdown
 from Yone.Handlers.validation import is_user_admin
 from telegram.ext.dispatcher import DispatcherHandlerStop
+from os.path import basename, dirname, isfile
+
 
 HELP_STRINGS = """Hey there! My name is *{}*.
 I'm a modular group management bot with a few fun extras! Have a look at the following for an idea of some of the things I can help you with. """.format(
@@ -37,8 +39,17 @@ for root, dirs, files in os.walk(path):
 for dirp in dir_path:
     dir_paths = dirp.replace("/", ".")
 
+for name in list_of_files:
+        mod_paths = name
+
+mod_name = [
+        basename(name)[:-3]
+        for name in list_of_files
+        if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py")
+    ]
+
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module(f"{dir_paths}." + module_name)
+    imported_module = importlib.import_module(f"{dir_paths}." + mod_name)
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
