@@ -16,7 +16,7 @@ def __list_all_modules():
         mod_paths = name
     all_modules = [
         basename(f)[:-3]
-        for f in mod_paths
+        for f in list_of_files
         if isfile(f) and f.endswith(".py") and not f.endswith("__init__.py")
     ]
 
