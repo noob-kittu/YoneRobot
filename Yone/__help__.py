@@ -25,7 +25,7 @@ CHAT_SETTINGS = {}
 USER_SETTINGS = {}
 
 import os
-path =r'./Yone/Plugins/'
+path =r'Yone/Plugins/'
 list_of_files = []
 dir_path = []
 for root, dirs, files in os.walk(path):
@@ -35,10 +35,10 @@ for root, dirs, files in os.walk(path):
         dir_path.append(os.path.join(root,dir))
 # This generates a list of modules in this folder for the * in __help__ to work.
 for dirp in dir_path:
-    dir_paths = dirp
+    dir_paths = dirp.replace("/", ".")
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module(dir_paths + module_name)
+    imported_module = importlib.import_module(f"{dir_paths}." + module_name)
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
