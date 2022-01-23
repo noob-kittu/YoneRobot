@@ -1,5 +1,4 @@
-from operator import imod
-from telegram import Chat, ChatMember, ParseMode, Update
+from telegram import Chat, ChatMember
 from Yone import INSPECTOR, REQUESTER, dispatcher
 from threading import RLock
 from cachetools import TTLCache
