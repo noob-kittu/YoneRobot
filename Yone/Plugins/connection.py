@@ -6,7 +6,7 @@ from telegram.error import BadRequest, Unauthorized
 from telegram.ext import CommandHandler, CallbackQueryHandler, run_async
 
 import Yone.Database.connection_sql as sql
-from Yone import dispatcher, DRAGONS, DEV_USERS
+from Yone import dispatcher, INSPECTOR, DEV_USERS
 from Yone.Handlers import validation
 from Yone.Handlers.alternate import send_message, typing_action
 
@@ -121,7 +121,7 @@ def connect_chat(update, context):
             ismember = getstatusadmin.status in ("member")
             isallow = sql.allow_connect_to_chat(connect_chat)
 
-            if (isadmin) or (isallow and ismember) or (user.id in DRAGONS):
+            if (isadmin) or (isallow and ismember) or (user.id in INSPECTOR):
                 connection_status = sql.connect(
                     update.effective_message.from_user.id, connect_chat
                 )
@@ -216,7 +216,7 @@ def connect_chat(update, context):
         isadmin = getstatusadmin.status in ("administrator", "creator")
         ismember = getstatusadmin.status in ("member")
         isallow = sql.allow_connect_to_chat(chat.id)
-        if (isadmin) or (isallow and ismember) or (user.id in DRAGONS):
+        if (isadmin) or (isallow and ismember) or (user.id in INSPECTOR):
             connection_status = sql.connect(
                 update.effective_message.from_user.id, chat.id
             )
@@ -278,13 +278,13 @@ def connected(bot: Bot, update: Update, chat, user_id, need_admin=True):
         if (
             (isadmin)
             or (isallow and ismember)
-            or (user.id in DRAGONS)
+            or (user.id in INSPECTOR)
             or (user.id in DEV_USERS)
         ):
             if need_admin is True:
                 if (
                     getstatusadmin.status in ("administrator", "creator")
-                    or user_id in DRAGONS
+                    or user_id in INSPECTOR
                     or user.id in DEV_USERS
                 ):
                     return conn_id
@@ -349,7 +349,7 @@ def connect_button(update, context):
         ismember = getstatusadmin.status in ("member")
         isallow = sql.allow_connect_to_chat(target_chat)
 
-        if (isadmin) or (isallow and ismember) or (user.id in DRAGONS):
+        if (isadmin) or (isallow and ismember) or (user.id in INSPECTOR):
             connection_status = sql.connect(query.from_user.id, target_chat)
 
             if connection_status:
