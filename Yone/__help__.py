@@ -8,7 +8,7 @@ from telegram.ext import CallbackContext
 from telegram.utils.helpers import escape_markdown
 from Yone.Handlers.validation import is_user_admin
 from telegram.ext.dispatcher import DispatcherHandlerStop
-from os.path import basename, dirname, isfile
+from os.path import isfile
 
 
 HELP_STRINGS = """Hey there! My name is *{}*.
@@ -29,27 +29,21 @@ USER_SETTINGS = {}
 import os
 path =r'Yone/Plugins/'
 list_of_files = []
-dir_path = []
 for root, dirs, files in os.walk(path):
     for file in files:
         list_of_files.append(os.path.join(root,file))
-    for dir in dirs:
-        dir_path.append(os.path.join(root,dir))
-# This generates a list of modules in this folder for the * in __help__ to work.
-for dirp in dir_path:
-    dir_paths = dirp.replace("/", ".")
 
 for name in list_of_files:
         mod_paths = name
 
 mod_name = [
-        basename(name)[:-3]
+        name[:-3].replace("/", ".").replace("\\", ".")
         for name in list_of_files
         if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py")
     ]
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module(f"{dir_paths}." + mod_name)
+    imported_module = importlib.import_module(mod_name)
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
