@@ -38,9 +38,11 @@ mod_name = [
         for name in list_of_files
         if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py")
     ]
+for mod_path in mod_name:
+    m_path = mod_path
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module(str(mod_name))
+    imported_module = importlib.import_module(m_path)
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
