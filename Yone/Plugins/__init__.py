@@ -13,12 +13,8 @@ def __list_all_modules():
             list_of_files.append(os.path.join(root,file))
 # This generates a list of modules in this folder for the * in __help__ to work.
     for name in list_of_files:
-        mod_paths = name
-    all_modules = [
-        basename(f)[:-3]
-        for f in list_of_files
-        if isfile(f) and f.endswith(".py") and not f.endswith("__init__.py")
-    ]
+        if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py"):
+            all_modules = name
 
     if LOAD or NO_LOAD:
         to_load = LOAD
