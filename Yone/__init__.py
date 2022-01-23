@@ -58,7 +58,7 @@ if ENV:
     ALLOW_EXCL = os.environ.get('ALLOW_EXCL', False)
 
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None)
-    EVENT_LOGS = int(os.environ.get("EVENT_LOGS", None))
+    EVENT_LOGS = int(os.environ.get("EVENT_LOGS", -123))
 
     WEBHOOK = bool(os.environ.get("WEBHOOK", False))
     CERT_PATH = os.environ.get("CERT_PATH")
