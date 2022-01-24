@@ -87,7 +87,7 @@ buttons = [
     [
         InlineKeyboardButton(text="Tools", callback_data="tools_"),
         InlineKeyboardButton(
-            text="Bot Info", callback_data="botinfo_"
+            text="Bot Info", callback_data="yone_"
         ),
     ],
     [
