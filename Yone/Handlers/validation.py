@@ -403,6 +403,6 @@ def connection_status(func):
 
 
 # Workaround for circular import with connection.py
-from Yone.Plugins import connection
+from Yone.Plugins.Admin import connection
 
 connected = connection.connected
