@@ -40,10 +40,8 @@ mod_name = [
     ]
 
 
-for module_name in ALL_MODULES:
-    for mod_path in mod_name:
-       m_path = mod_path
-    imported_module = importlib.import_module(m_path)
+for mod_path in mod_name:
+    imported_module = importlib.import_module(mod_path)
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
