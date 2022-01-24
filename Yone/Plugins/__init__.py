@@ -49,7 +49,7 @@ def __list_all_modules():
 
         return to_load
 
-    return mod_path
+    return modules
 
 
 ALL_MODULES = __list_all_modules()
