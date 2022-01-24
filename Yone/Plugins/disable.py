@@ -338,7 +338,7 @@ if is_module_loaded(FILENAME):
     dispatcher.add_handler(TOGGLE_HANDLER)
 
 
-    __mod_name__ = "Disable"
+    __mod_name__ = "Disabling"
 
 
 else:
