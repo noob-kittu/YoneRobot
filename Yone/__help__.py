@@ -48,7 +48,7 @@ for module_name in mod_name:
     if imported_module.__mod_name__.lower() not in IMPORTED:
         IMPORTED[imported_module.__mod_name__.lower()] = imported_module
     else:
-        IMPORTED[imported_module.__mod_name__.lower()] = imported_module
+        raise Exception("Can't have two modules with the same name! Please change one")
 
     if hasattr(imported_module, "__help__") and imported_module.__help__:
         HELPABLE[imported_module.__mod_name__.lower()] = imported_module
