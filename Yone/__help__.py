@@ -92,7 +92,7 @@ for u_module_names in user_mod_name:
         raise Exception("Can't have two modules with the same name! Please change one")
 
     if hasattr(user_imported_module, "__help__") and user_imported_module.__help__:
-        ADMIN[user_imported_module.__mod_name__.lower()] = user_imported_module
+        USER[user_imported_module.__mod_name__.lower()] = user_imported_module
 
 for module_name in mod_name:
     imported_module = importlib.import_module(module_name)
