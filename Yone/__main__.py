@@ -38,6 +38,7 @@ get_settings,
 settings_button, 
 migrate_chats, 
 send_help, 
+send_admin_help,
 send_settings,
 admin_help_button,
 HELP_STRINGS,
@@ -127,6 +128,13 @@ def start(update: Update, context: CallbackContext):
                     HELPABLE[mod].__help__,
                     InlineKeyboardMarkup(
                         [[InlineKeyboardButton(text="⬅️ BACK", callback_data="help_back")]]
+                    ),
+                )
+                send_admin_help(
+                    update.effective_chat.id,
+                    ADMIN[mod].__help__,
+                    InlineKeyboardMarkup(
+                        [[InlineKeyboardButton(text="⬅️ BACK", callback_data="admin_back")]]
                     ),
                 )
 
