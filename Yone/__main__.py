@@ -79,9 +79,15 @@ buttons = [
             text="➕️ Add me to your chat ➕️", url="t.me/Yone_Robot?startgroup=true"),
     ],
     [
-        InlineKeyboardButton(text="News", callback_data="yone_"),
+        InlineKeyboardButton(text="Admin", callback_data="admin_"),
         InlineKeyboardButton(
-            text="Support", url=f"https://t.me/{SUPPORT_CHAT}"
+            text="Users", callback_data="users_"
+        ),
+    ],
+    [
+        InlineKeyboardButton(text="Tools", callback_data="tools_"),
+        InlineKeyboardButton(
+            text="Bot Info", callback_data="botinfo_"
         ),
     ],
     [
