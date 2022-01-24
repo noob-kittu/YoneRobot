@@ -40,7 +40,7 @@ from Yone.Handlers.validation import (
 )
 from Yone.Handlers.extraction import extract_user_and_text
 from Yone.Handlers.string_handling import extract_time
-from Yone.Plugins.log_channel import gloggable, loggable
+from Yone.Plugins.Admin.log_channel import gloggable, loggable
 
 
  
