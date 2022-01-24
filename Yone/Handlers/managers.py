@@ -1,6 +1,5 @@
 import Yone.Database.blacklistusers_sql as sql
 from Yone import DEV_USERS, ALLOW_EXCL, INSPECTOR, REQUESTER
-SUPPORT_USERS = ""
 from telegram import Update
 from telegram.ext import CommandHandler, MessageHandler, RegexHandler, Filters
 from pyrate_limiter import (
@@ -19,8 +18,11 @@ else:
 
 class AntiSpam:
     def __init__(self):
-        self.whitelist = (DEV_USERS or []) + (INSPECTOR or []) + (REQUESTER or []) + (SUPPORT_USERS or [])
-    
+        self.whitelist = (
+            (DEV_USERS or []) 
+            + (INSPECTOR or []) 
+            + (REQUESTER or []) 
+        )    
         # Values are HIGHLY experimental, its recommended you pay attention to our commits as we will be adjusting the values over time with what suits best.
         Duration.CUSTOM = 15  # Custom duration, 15 seconds
         self.sec_limit = RequestRate(6, Duration.CUSTOM)  # 6 / Per 15 Seconds
