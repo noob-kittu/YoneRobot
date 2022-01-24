@@ -331,6 +331,29 @@ def can_promote(func):
 
     return promote_rights
 
+def user_can_changeinfo(func):
+    @wraps(func)
+    def changeinfo_rights(update: Update, context: CallbackContext, *args, **kwargs):
+        bot = context.bot
+        chat = update.effective_chat
+        update_chat_title = chat.title
+        message_chat_title = update.effective_message.chat.title
+        if update_chat_title == message_chat_title:
+            cant_changeInfo = "You don't have enough rights to delete group photo"
+        else:
+            cant_changeInfo = (
+                f"I can't Change Info in <b>{update_chat_title}</b>!\n"
+                f"Make sure I'm admin there and can change group info."
+            )
+
+        if chat.get_member(bot.id).can_change_info:
+            return func(update, context, *args, **kwargs)
+        else:
+            update.effective_message.reply_text(cant_changeInfo, parse_mode=ParseMode.HTML)
+
+    return changeinfo_rights
+    
+
 
 def can_restrict(func):
     @wraps(func)
