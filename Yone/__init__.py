@@ -34,13 +34,13 @@ if ENV:
     except ValueError:
         raise Exception("Your OWNER_ID env variable is not a valid integer.")
     try:
-        INSPECTOR = set(int(x) for x in os.environ.get("INSPECTOR", "").split())
-        DEV_USERS = set(int(x) for x in os.environ.get("DEV_USERS", "").split())
+        INSPECTOR = {int(x) for x in os.environ.get("DRAGONS", "").split()}
+        DEV_USERS = {int(x) for x in os.environ.get("DEV_USERS", "").split()}
     except ValueError:
         raise Exception("Your inspector(sudo) or dev users list does not contain valid integers.")
 
     try:
-        REQUESTER = set(int(x) for x in os.environ.get("REQUESTER", "").split())
+        REQUESTER = {int(x) for x in os.environ.get("DEMONS", "").split()}
     except ValueError:
         raise Exception("Your requester list does not contain valid integers.")
     try:
