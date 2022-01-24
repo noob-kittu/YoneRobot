@@ -31,7 +31,20 @@ from Yone import (
     updater)
 
 from Yone.Plugins import ALL_MODULES
-from Yone.__help__ import get_help, help_button, get_settings, settings_button, migrate_chats, send_help, send_settings,HELP_STRINGS,IMPORTED,HELPABLE
+from Yone.__help__ import (
+get_help, 
+help_button, 
+get_settings, 
+settings_button, 
+migrate_chats, 
+send_help, 
+send_settings,
+admin_help_button,
+HELP_STRINGS,
+IMPORTED,
+IMPORTED,
+HELPABLE,
+ADMIN )
 
 
 def get_readable_time(seconds: int) -> str:
@@ -79,7 +92,7 @@ buttons = [
             text="➕️ Add me to your chat ➕️", url="t.me/Yone_Robot?startgroup=true"),
     ],
     [
-        InlineKeyboardButton(text="Admin", callback_data="admin_"),
+        InlineKeyboardButton(text="Admin", callback_data="admin_back"),
         InlineKeyboardButton(
             text="Users", callback_data="users_"
         ),
@@ -200,6 +213,7 @@ def main():
 
     help_handler = CommandHandler("help", get_help, run_async=True)
     help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_.*", run_async=True)
+    admin_help_callback_handler = CallbackQueryHandler(admin_help_button, pattern=r"admin_.*", run_async=True)
 
     about_callback_handler = CallbackQueryHandler(yone_about_callback, pattern=r"yone_", run_async=True)
 

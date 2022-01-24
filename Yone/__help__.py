@@ -19,6 +19,7 @@ I'm a modular group management bot with a few fun extras! Have a look at the fol
 IMPORTED = {}
 MIGRATEABLE = []
 HELPABLE = {}
+ADMIN = {}
 STATS = []
 USER_INFO = []
 DATA_IMPORT = []
@@ -38,6 +39,32 @@ mod_name = [
         for name in list_of_files
         if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py")
     ]
+
+
+path =r'Yone/Plugins/Admin/'
+admin_list_of_files = []
+for root, dirs, files in os.walk(path):
+    for file in files:
+        admin_list_of_files.append(os.path.join(root,file))
+
+admin_mod_name = [
+        name[:-3].replace("/", ".").replace("\\", ".")
+        for name in admin_list_of_files
+        if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py")
+    ]
+
+for module_name in admin_mod_name:
+    imported_module = importlib.import_module(module_name)
+    if not hasattr(imported_module, "__mod_name__"):
+        imported_module.__mod_name__ = imported_module.__name__
+
+    if imported_module.__mod_name__.lower() not in IMPORTED:
+        IMPORTED[imported_module.__mod_name__.lower()] = imported_module
+    else:
+        raise Exception("Can't have two modules with the same name! Please change one")
+
+    if hasattr(imported_module, "__help__") and imported_module.__help__:
+        ADMIN[imported_module.__mod_name__.lower()] = imported_module
 
 
 for module_name in mod_name:
@@ -86,6 +113,83 @@ def send_help(chat_id, text, keyboard=None):
         reply_markup=keyboard,
     )
 
+
+def send_admin_help(chat_id, text, keyboard=None):
+    if not keyboard:
+        keyboard = InlineKeyboardMarkup(paginate_modules(0, ADMIN, "admin"))
+    dispatcher.bot.send_message(
+        chat_id=chat_id,
+        text=text,
+        parse_mode=ParseMode.MARKDOWN,
+        disable_web_page_preview=True,
+        reply_markup=keyboard,
+    )
+
+def admin_help_button(update, context):
+    query = update.callback_query
+    mod_match = re.match(r"admin_module\((.+?)\)", query.data)
+    prev_match = re.match(r"admin_prev\((.+?)\)", query.data)
+    next_match = re.match(r"admin_next\((.+?)\)", query.data)
+    back_match = re.match(r"admin_back", query.data)
+
+    print(query.message.chat.id)
+
+    try:
+        if mod_match:
+            module = mod_match.group(1)
+            text = (
+                "Here is the help for the *{}* module:\n".format(
+                    ADMIN[module].__mod_name__
+                )
+                + ADMIN[module].__help__
+            )
+            query.message.edit_text( 
+                text=text,
+                parse_mode=ParseMode.MARKDOWN,
+                disable_web_page_preview=True,
+                reply_markup=InlineKeyboardMarkup(
+                    [ 
+                      [InlineKeyboardButton(text="Back", callback_data="admin_back")]
+                        
+                    ]
+                ),
+            )
+
+        elif prev_match:
+            curr_page = int(prev_match.group(1))
+            query.message.edit_text(
+                text=HELP_STRINGS,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(curr_page - 1, ADMIN, "admin")
+                ),
+            )
+
+        elif next_match:
+            next_page = int(next_match.group(1))
+            query.message.edit_text(
+                text=HELP_STRINGS,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(next_page + 1, ADMIN, "admin")
+                ),
+            )
+
+        elif back_match:
+            query.message.edit_text(
+                text=HELP_STRINGS,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(0, ADMIN, "admin")
+                ),
+            )
+
+        # ensure no spinny white circle
+        context.bot.answer_callback_query(query.id)
+        # query.message.delete()
+
+    except BadRequest:
+        pass
 
 def help_button(update, context):
     query = update.callback_query
