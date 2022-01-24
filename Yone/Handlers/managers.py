@@ -1,5 +1,7 @@
 import Yone.Database.blacklistusers_sql as sql
-from Yone import DEV_USERS, ALLOW_EXCL, INSPECTOR, REQUESTER
+from Yone import ALLOW_EXCL
+from Yone import DEV_USERS, INSPECTOR, REQUESTER
+
 from telegram import Update
 from telegram.ext import CommandHandler, MessageHandler, RegexHandler, Filters
 from pyrate_limiter import (
@@ -19,10 +21,10 @@ else:
 class AntiSpam:
     def __init__(self):
         self.whitelist = (
-            (DEV_USERS or []) 
-            + (INSPECTOR or []) 
-            + (REQUESTER or []) 
-        )    
+            (DEV_USERS or [])
+            + (INSPECTOR or [])
+            + (REQUESTER or [])
+        )
         # Values are HIGHLY experimental, its recommended you pay attention to our commits as we will be adjusting the values over time with what suits best.
         Duration.CUSTOM = 15  # Custom duration, 15 seconds
         self.sec_limit = RequestRate(6, Duration.CUSTOM)  # 6 / Per 15 Seconds
@@ -55,10 +57,9 @@ MessageHandlerChecker = AntiSpam()
 
 
 class CustomCommandHandler(CommandHandler):
-    def __init__(self, command, callback, run_async=True, allow_edit=False, **kwargs):
-        if "admin_ok" in kwargs:
-            del kwargs["admin_ok"]
-        super().__init__(command, callback, run_async=run_async, **kwargs)
+    def __init__(self, command, callback, admin_ok=False, allow_edit=False, **kwargs):
+        super().__init__(command, callback, **kwargs)
+
         if allow_edit is False:
             self.filters &= ~(
                 Filters.update.edited_message | Filters.update.edited_channel_post
@@ -73,26 +74,28 @@ class CustomCommandHandler(CommandHandler):
             except:
                 user_id = None
 
+            if user_id:
+                if sql.is_user_blacklisted(user_id):
+                    return False
+
             if message.text and len(message.text) > 1:
                 fst_word = message.text.split(None, 1)[0]
                 if len(fst_word) > 1 and any(
                     fst_word.startswith(start) for start in CMD_STARTERS
                 ):
+
                     args = message.text.split()[1:]
                     command = fst_word[1:].split("@")
-                    command.append(
-                        message.bot.username
-                    )  # in case the command was sent without a username
-
+                    command.append(message.bot.username)
+                    if user_id == 1087968824:
+                        user_id = update.effective_chat.id
                     if not (
                         command[0].lower() in self.command
                         and command[1].lower() == message.bot.username.lower()
                     ):
                         return None
-
                     if SpamChecker.check_user(user_id):
                         return None
-
                     filter_result = self.filters(update)
                     if filter_result:
                         return args, filter_result
