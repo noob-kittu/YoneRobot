@@ -54,17 +54,17 @@ admin_mod_name = [
     ]
 
 for module_name in admin_mod_name:
-    imported_module = importlib.import_module(module_name)
-    if not hasattr(imported_module, "__mod_name__"):
-        imported_module.__mod_name__ = imported_module.__name__
+    admin_imported_module = importlib.import_module(module_name)
+    if not hasattr(admin_imported_module, "__mod_name__"):
+        admin_imported_module.__mod_name__ = admin_imported_module.__name__
 
-    if imported_module.__mod_name__.lower() not in IMPORTED:
-        IMPORTED[imported_module.__mod_name__.lower()] = imported_module
+    if admin_imported_module.__mod_name__.lower() not in IMPORTED:
+        IMPORTED[admin_imported_module.__mod_name__.lower()] = admin_imported_module
     else:
         raise Exception("Can't have two modules with the same name! Please change one")
 
-    if hasattr(imported_module, "__help__") and imported_module.__help__:
-        ADMIN[imported_module.__mod_name__.lower()] = imported_module
+    if hasattr(admin_imported_module, "__help__") and admin_imported_module.__help__:
+        ADMIN[admin_imported_module.__mod_name__.lower()] = admin_imported_module
 
 
 for module_name in mod_name:
