@@ -31,19 +31,7 @@ from Yone import (
     updater)
 
 from Yone.Plugins import ALL_MODULES
-from Yone.__help__ import (
-    get_help, 
-    help_button, 
-    get_settings, 
-    settings_button, 
-    migrate_chats, 
-    send_help, 
-    send_settings,
-    HELP_STRINGS,
-    IMPORTED,
-    HELPABLE,
-
-)
+from Yone.__help__ import get_help, help_button, get_settings, settings_button, migrate_chats, send_help, send_settings,HELP_STRINGS,IMPORTED,HELPABLE
 
 
 def get_readable_time(seconds: int) -> str:
