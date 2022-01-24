@@ -17,6 +17,7 @@ I'm a modular group management bot with a few fun extras! Have a look at the fol
     if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
 
 IMPORTED = {}
+ADMIN_IMPORTED = {}
 MIGRATEABLE = []
 HELPABLE = {}
 ADMIN = {}
@@ -53,13 +54,13 @@ admin_mod_name = [
         if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py")
     ]
 
-for module_name in admin_mod_name:
-    admin_imported_module = importlib.import_module(module_name)
+for module_names in admin_mod_name:
+    admin_imported_module = importlib.import_module(module_names)
     if not hasattr(admin_imported_module, "__mod_name__"):
         admin_imported_module.__mod_name__ = admin_imported_module.__name__
 
-    if admin_imported_module.__mod_name__.lower() not in IMPORTED:
-        IMPORTED[admin_imported_module.__mod_name__.lower()] = admin_imported_module
+    if admin_imported_module.__mod_name__.lower() not in ADMIN_IMPORTED:
+        ADMIN_IMPORTED[admin_imported_module.__mod_name__.lower()] = admin_imported_module
     else:
         raise Exception("Can't have two modules with the same name! Please change one")
 
