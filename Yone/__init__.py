@@ -69,6 +69,7 @@ if ENV:
     NO_LOAD = os.environ.get("NO_LOAD", "translation").split()
 
     DEL_CMDS = bool(os.environ.get("DEL_CMDS", True))
+    INFOPIC = bool(os.environ.get("INFOPIC", False))
 
 
 

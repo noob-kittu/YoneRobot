@@ -745,7 +745,23 @@ def unpinallbtn(update: Update, context: CallbackContext):
 __help__ = """
 Admins Play Major Roles To Manage A Group, We Have Created Some Hack Command In Our Bot So It Will Help To Manage Group Easily Via Bot.
 You Just Need To Give Commands To Bot And But Will Work for You. Click On Bellow Buttons & Get Detailed Information.
- ❍ /admins*:* list of admins in the chat
+ ‣ `/admins`*:* list of admins in the chat
+
+ *Admins only:*
+ ‣ `/pin`*:* silently pins the message replied to - add `'loud'` or `'notify'` to give notifs to users
+ ‣ `/unpin`*:* unpins the currently pinned message in group
+ ‣ `/unpinall`*:* unpins all the currently pinned messages in group
+ ‣ `/invitelink`*:* gets invitelink
+ ‣ `/promote`*:* promotes the user replied to
+ ‣ `/fullpromote`*:* promotes the user with all rights
+ ‣ `/demote`*:* demotes the user replied to
+ ‣ `/title <title here>`*:* sets a custom title for an admin that the bot promoted
+ ‣ `/admincache`*:* force refresh the admins list
+ ‣ `/setgpic`*:* set new profile pic of the group (reply image)
+ ‣ `/delgpic`*:* del the currently profile pic of the group
+ ‣ `/setgtitle <New Name for Group>`*:* change the title of group
+ ‣ `/setdescription <New Description for Group>`*:* change the Description of group
+ ‣ `/setsticker`*:* set the stricker pack for group
 """
 
 ADMINLIST_HANDLER = DisableAbleCommandHandler("admins", adminlist, run_async=True)

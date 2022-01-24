@@ -8,7 +8,7 @@ __mod_name__ = "Github"
 
 __help__ = """ Get Your Github Profile information by using this Command - 
 
- ‣ /github noob-kittu - will send profile of your github account """
+ ‣ `/github noob-kittu` - will send profile of your github account """
 
 def github(update: Update, context: CallbackContext):
     bot = context.bot
