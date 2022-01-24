@@ -39,13 +39,16 @@ settings_button,
 migrate_chats, 
 send_help, 
 send_admin_help,
+send_user_help,
+user_help_button,
 send_settings,
 admin_help_button,
 HELP_STRINGS,
 IMPORTED,
 IMPORTED,
 HELPABLE,
-ADMIN )
+ADMIN,
+USER )
 
 
 def get_readable_time(seconds: int) -> str:
@@ -95,7 +98,7 @@ buttons = [
     [
         InlineKeyboardButton(text="Admin", callback_data="admin_back"),
         InlineKeyboardButton(
-            text="Users", callback_data="users_"
+            text="Users", callback_data="user_back"
         ),
     ],
     [
@@ -135,6 +138,13 @@ def start(update: Update, context: CallbackContext):
                     ADMIN[mod].__help__,
                     InlineKeyboardMarkup(
                         [[InlineKeyboardButton(text="⬅️ BACK", callback_data="admin_back")]]
+                    ),
+                )
+                send_user_help(
+                    update.effective_chat.id,
+                    USER[mod].__help__,
+                    InlineKeyboardMarkup(
+                        [[InlineKeyboardButton(text="⬅️ BACK", callback_data="user_back")]]
                     ),
                 )
 
@@ -222,6 +232,7 @@ def main():
     help_handler = CommandHandler("help", get_help, run_async=True)
     help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_.*", run_async=True)
     admin_help_callback_handler = CallbackQueryHandler(admin_help_button, pattern=r"admin_.*", run_async=True)
+    user_help_callback_handler = CallbackQueryHandler(user_help_button, pattern=r"user_.*", run_async=True)
 
     about_callback_handler = CallbackQueryHandler(yone_about_callback, pattern=r"yone_", run_async=True)
 
@@ -236,6 +247,7 @@ def main():
     dispatcher.add_handler(settings_handler)
     dispatcher.add_handler(help_callback_handler)
     dispatcher.add_handler(admin_help_callback_handler)
+    dispatcher.add_handler(user_help_callback_handler)
     dispatcher.add_handler(settings_callback_handler)
     dispatcher.add_handler(migrate_handler)
 
