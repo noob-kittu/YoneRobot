@@ -59,6 +59,7 @@ if ENV:
 
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None)
     EVENT_LOGS = os.environ.get("EVENT_LOGS", None)
+    JOIN_LOGGER = os.environ.get("JOIN_LOGGER", None)
 
     WEBHOOK = bool(os.environ.get("WEBHOOK", False))
     CERT_PATH = os.environ.get("CERT_PATH")

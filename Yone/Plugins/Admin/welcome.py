@@ -10,7 +10,7 @@ import Yone.Database.welcome_sql as sql
 import Yone.Database.global_bans_sql as gban_sql
 from Yone import (
     REQUESTER, DEV_USERS, INSPECTOR, JOIN_LOGGER, LOGGER,
-    OWNER_ID, TIGERS, WOLVES, dispatcher, sw,
+    OWNER_ID, dispatcher
 )
 from Yone.Handlers.validation import (
     is_user_ban_protected, user_admin, connection_status,
@@ -170,10 +170,6 @@ def new_member(update: Update, context: CallbackContext):
         media_wel = False
 
         if gban_sql.does_chat_gban(chat.id):
-            if sw is not None:
-                sw_ban = sw.get_ban(new_mem.id)
-                if sw_ban:
-                    return
 
             if is_user_gbanned(new_mem.id):
                 return
@@ -538,11 +534,6 @@ def left_member(update: Update, context: CallbackContext):
         if left_mem:
 
             if gban_sql.does_chat_gban(chat.id):
-                # Thingy for spamwatched users
-                if sw is not None:
-                    sw_ban = sw.get_ban(left_mem.id)
-                    if sw_ban:
-                        return
 
                 # Dont say goodbyes to gbanned users
                 if is_user_gbanned(left_mem.id):
