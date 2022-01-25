@@ -54,6 +54,38 @@ def paginate_modules(page_n: int, module_dict: Dict, prefix, chat=None) -> List:
     return pairs
 
 
+def build_keyboard(buttons):
+    keyb = []
+    for btn in buttons:
+        if btn.same_line and keyb:
+            keyb[-1].append(InlineKeyboardButton(btn.name, url=btn.url))
+        else:
+            keyb.append([InlineKeyboardButton(btn.name, url=btn.url)])
+
+    return keyb
+
+
+def revert_buttons(buttons):
+    res = ""
+    for btn in buttons:
+        if btn.same_line:
+            res += f"\n[{btn.name}](buttonurl://{btn.url}:same)"
+        else:
+            res += f"\n[{btn.name}](buttonurl://{btn.url})"
+
+    return res
+
+def build_keyboard_parser(bot, chat_id, buttons):
+    keyb = []
+    for btn in buttons:
+        if btn.url == "{rules}":
+            btn.url = "http://t.me/{}?start={}".format(bot.username, chat_id)
+        if btn.same_line and keyb:
+            keyb[-1].append(InlineKeyboardButton(btn.name, url=btn.url))
+        else:
+            keyb.append([InlineKeyboardButton(btn.name, url=btn.url)])
+
+    return keyb
 
 def is_module_loaded(name):
     return name not in NO_LOAD

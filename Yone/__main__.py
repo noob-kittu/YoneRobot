@@ -43,12 +43,15 @@ send_user_help,
 user_help_button,
 send_settings,
 admin_help_button,
+tools_help_button,
+send_tools_help,
 HELP_STRINGS,
 IMPORTED,
 IMPORTED,
 HELPABLE,
 ADMIN,
-USER )
+USER,
+TOOLS )
 
 
 def get_readable_time(seconds: int) -> str:
@@ -102,7 +105,7 @@ buttons = [
         ),
     ],
     [
-        InlineKeyboardButton(text="Tools", callback_data="tools_"),
+        InlineKeyboardButton(text="Tools", callback_data="tools_back"),
         InlineKeyboardButton(
             text="Bot Info", callback_data="yone_"
         ),
@@ -145,6 +148,13 @@ def start(update: Update, context: CallbackContext):
                     USER[mod].__help__,
                     InlineKeyboardMarkup(
                         [[InlineKeyboardButton(text="⬅️ BACK", callback_data="user_back")]]
+                    ),
+                )
+                send_tools_help(
+                    update.effective_chat.id,
+                    USER[mod].__help__,
+                    InlineKeyboardMarkup(
+                        [[InlineKeyboardButton(text="⬅️ BACK", callback_data="tools_back")]]
                     ),
                 )
 
@@ -233,6 +243,7 @@ def main():
     help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_.*", run_async=True)
     admin_help_callback_handler = CallbackQueryHandler(admin_help_button, pattern=r"admin_.*", run_async=True)
     user_help_callback_handler = CallbackQueryHandler(user_help_button, pattern=r"user_.*", run_async=True)
+    tools_help_callback_handler = CallbackQueryHandler(tools_help_button, pattern=r"tools_.*", run_async=True)
 
     about_callback_handler = CallbackQueryHandler(yone_about_callback, pattern=r"yone_", run_async=True)
 
@@ -248,6 +259,7 @@ def main():
     dispatcher.add_handler(help_callback_handler)
     dispatcher.add_handler(admin_help_callback_handler)
     dispatcher.add_handler(user_help_callback_handler)
+    dispatcher.add_handler(tools_help_callback_handler)
     dispatcher.add_handler(settings_callback_handler)
     dispatcher.add_handler(migrate_handler)
 

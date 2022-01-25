@@ -19,10 +19,12 @@ I'm a modular group management bot with a few fun extras! Have a look at the fol
 IMPORTED = {}
 ADMIN_IMPORTED = {}
 USER_IMPORTED = {}
+TOOLS_IMPORTED = {}
 MIGRATEABLE = []
 HELPABLE = {}
 ADMIN = {}
 USER = {}
+TOOLS = {}
 STATS = []
 USER_INFO = []
 DATA_IMPORT = []
@@ -94,6 +96,32 @@ for u_module_names in user_mod_name:
     if hasattr(user_imported_module, "__help__") and user_imported_module.__help__:
         USER[user_imported_module.__mod_name__.lower()] = user_imported_module
 
+
+path =r'Yone/Plugins/Tools/'
+tools_list_of_files = []
+for root, dirs, files in os.walk(path):
+    for file in files:
+        tools_list_of_files.append(os.path.join(root,file))
+
+tools_mod_name = [
+        name[:-3].replace("/", ".").replace("\\", ".")
+        for name in tools_list_of_files
+        if isfile(name) and name.endswith(".py") and not name.endswith("__init__.py")
+    ]
+
+for t_module_name in tools_mod_name:
+    tools_imported_module = importlib.import_module(t_module_name)
+    if not hasattr(tools_imported_module, "__mod_name__"):
+        tools_imported_module.__mod_name__ = tools_imported_module.__name__
+
+    if tools_imported_module.__mod_name__.lower() not in TOOLS_IMPORTED:
+        TOOLS_IMPORTED[tools_imported_module.__mod_name__.lower()] = tools_imported_module
+    else:
+        raise Exception("Can't have two modules with the same name! Please change one")
+
+    if hasattr(tools_imported_module, "__help__") and tools_imported_module.__help__:
+        TOOLS[tools_imported_module.__mod_name__.lower()] = tools_imported_module
+
 for module_name in mod_name:
     imported_module = importlib.import_module(module_name)
     if not hasattr(imported_module, "__mod_name__"):
@@ -155,6 +183,17 @@ def send_admin_help(chat_id, text, keyboard=None):
 def send_user_help(chat_id, text, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, USER, "user"))
+    dispatcher.bot.send_message(
+        chat_id=chat_id,
+        text=text,
+        parse_mode=ParseMode.MARKDOWN,
+        disable_web_page_preview=True,
+        reply_markup=keyboard,
+    )
+
+def send_tools_help(chat_id, text, keyboard=None):
+    if not keyboard:
+        keyboard = InlineKeyboardMarkup(paginate_modules(0, TOOLS, "tools"))
     dispatcher.bot.send_message(
         chat_id=chat_id,
         text=text,
@@ -282,6 +321,71 @@ def user_help_button(update, context):
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(0, USER, "user")
+                ),
+            )
+
+        # ensure no spinny white circle
+        context.bot.answer_callback_query(query.id)
+        # query.message.delete()
+
+    except BadRequest:
+        pass
+
+
+def tools_help_button(update, context):
+    query = update.callback_query
+    mod_match = re.match(r"tools_module\((.+?)\)", query.data)
+    prev_match = re.match(r"tools_prev\((.+?)\)", query.data)
+    next_match = re.match(r"tools_next\((.+?)\)", query.data)
+    back_match = re.match(r"tools_back", query.data)
+
+    try:
+        if mod_match:
+            module = mod_match.group(1)
+            text = (
+                "Here is the help for the *{}* module:\n".format(
+                    TOOLS[module].__mod_name__
+                )
+                + TOOLS[module].__help__
+            )
+            query.message.edit_text( 
+                text=text,
+                parse_mode=ParseMode.MARKDOWN,
+                disable_web_page_preview=True,
+                reply_markup=InlineKeyboardMarkup(
+                    [ 
+                      [InlineKeyboardButton(text="Back", callback_data="tools_back")]
+                        
+                    ]
+                ),
+            )
+
+        elif prev_match:
+            curr_page = int(prev_match.group(1))
+            query.message.edit_text(
+                text=HELP_STRINGS,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(curr_page - 1, TOOLS, "tools")
+                ),
+            )
+
+        elif next_match:
+            next_page = int(next_match.group(1))
+            query.message.edit_text(
+                text=HELP_STRINGS,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(next_page + 1, TOOLS, "tools")
+                ),
+            )
+
+        elif back_match:
+            query.message.edit_text(
+                text=HELP_STRINGS,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=InlineKeyboardMarkup(
+                    paginate_modules(0, TOOLS, "tools")
                 ),
             )
 
