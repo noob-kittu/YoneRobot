@@ -24,7 +24,7 @@ from Yone.Plugins.disable import DisableAbleCommandHandler
 from Yone.Database.global_bans_sql import is_user_gbanned
 from Yone.Database.afk_sql import is_afk, check_afk_status
 from Yone.Database.users_sql import get_user_num_chats
-from Yone.Handlers.validation import sudo_plus, user_admin
+from Yone.Handlers.validation import sudo_plus, user_admin, support_plus
 from Yone.Handlers.extraction import extract_user
 
 def no_by_per(totalhp, percentage):
@@ -420,9 +420,10 @@ def set_about_me(update: Update, context: CallbackContext):
 
 
  
-@sudo_plus
+@support_plus
 def stats(update: Update, context: CallbackContext):
-    stats = "<b>Current stats of Yone:</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
+    first_name = update.effective_user.first_name
+    stats = f"<b>Current stats of {escape_markdown(context.bot.first_name)}:</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
     result = re.sub(r"(\d+)", r"<code>\1</code>", stats)
     update.effective_message.reply_text(result, parse_mode=ParseMode.HTML)
 
