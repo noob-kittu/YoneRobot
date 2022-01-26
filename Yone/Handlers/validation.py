@@ -31,9 +31,6 @@ def fuck_channel(update:Update, user_id: int, member: ChatMember = None) -> bool
         message.sender_chat is not None and message.sender_chat.type != "channel"
     ):
         return True
-    else:
-        return member.status in ("administrator", "creator")
-
 
 def is_user_admin(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
     if (
