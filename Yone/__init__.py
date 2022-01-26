@@ -56,6 +56,7 @@ if ENV:
     DB_URI = os.environ.get("DATABASE_URL")
     WORKERS = int(os.environ.get("WORKERS", 8))
     ALLOW_EXCL = os.environ.get('ALLOW_EXCL', False)
+    ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True)
 
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None)
     EVENT_LOGS = os.environ.get("EVENT_LOGS", None)
