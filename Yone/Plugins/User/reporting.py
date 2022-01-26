@@ -19,7 +19,7 @@ from telegram.ext import (
 from telegram.utils.helpers import mention_html
 
 REPORT_GROUP = 12
-REPORT_IMMUNE_USERS = INSPECTOR, REQUESTER
+REPORT_IMMUNE_USERS = INSPECTOR.union(REQUESTER)
 
 
  
