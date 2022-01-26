@@ -3,7 +3,7 @@ import re
 from typing import Optional
 
 import telegram
-from Yone import TIGERS, WOLVES, dispatcher
+from Yone import INSPECTOR, REQUESTER, dispatcher
 from Yone.Plugins.disable import DisableAbleCommandHandler
 from Yone.Handlers.validation import (
     bot_admin,
@@ -57,21 +57,21 @@ def warn(
         # message.reply_text("Damn admins, They are too far to be One Punched!")
         return
 
-    if user.id in TIGERS:
+    if user.id in INSPECTOR:
         if warner:
-            message.reply_text("Tigers cant be warned.")
+            message.reply_text("INSPECTOR cant be warned.")
         else:
             message.reply_text(
-                "Tiger triggered an auto warn filter!\n I won't warn tigers but they should avoid abusing this.",
+                "Tiger triggered an auto warn filter!\n I won't warn INSPECTOR but they should avoid abusing this.",
             )
         return
 
-    if user.id in WOLVES:
+    if user.id in REQUESTER:
         if warner:
             message.reply_text("Wolf disasters are warn immune.")
         else:
             message.reply_text(
-                "Wolf Disaster triggered an auto warn filter!\nI won't warn wolves but they should avoid abusing this.",
+                "Wolf Disaster triggered an auto warn filter!\nI won't warn REQUESTER but they should avoid abusing this.",
             )
         return
 
