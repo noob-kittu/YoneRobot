@@ -1,6 +1,6 @@
 from math import ceil
 from typing import Dict, List
-from telegram import InlineKeyboardButton
+from telegram import InlineKeyboardButton, MAX_MESSAGE_LENGTH
 from Yone import NO_LOAD
 
 
@@ -86,6 +86,27 @@ def build_keyboard_parser(bot, chat_id, buttons):
             keyb.append([InlineKeyboardButton(btn.name, url=btn.url)])
 
     return keyb
+
+
+
+def split_message(msg: str) -> List[str]:
+    if len(msg) < MAX_MESSAGE_LENGTH:
+        return [msg]
+
+    lines = msg.splitlines(True)
+    small_msg = ""
+    result = []
+    for line in lines:
+        if len(small_msg) + len(line) < MAX_MESSAGE_LENGTH:
+            small_msg += line
+        else:
+            result.append(small_msg)
+            small_msg = line
+    else:
+        # Else statement at the end of the for loop, so append the leftover string.
+        result.append(small_msg)
+
+    return result
 
 def is_module_loaded(name):
     return name not in NO_LOAD
