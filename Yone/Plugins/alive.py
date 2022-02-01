@@ -3,14 +3,12 @@ import time, os, psutil
 from Yone import (SUPPORT_CHAT)
 from platform import python_version
 from Yone import StartTime, dispatcher
-from Yone.Plugins import ALL_MODULES
 from Yone.Plugins.disable import DisableAbleCommandHandler
 from telegram import Update, ParseMode,  InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, run_async
 from telegram.utils.helpers import mention_html
 from Yone.__main__ import get_readable_time
 
-file_list = os.listdir(ALL_MODULES)
 
 PHOTO = "https://telegra.ph/file/b749b0e80e82291e85e10.jpg"
 
@@ -33,7 +31,6 @@ def alive(update: Update, context: CallbackContext):
         f"┣[• Uptime : {uptime} \n"
         f"┣[• Core : {psutil.cpu_percent()}%\n"
         f"┣[• Python   : Ver {python_version()} \n"
-        f"┣[• Modules  : {len(file_list)} Modules \n" 
         f"┗━━━━━━━━━━━━━━━━━━━")
  
 
