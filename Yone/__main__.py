@@ -98,7 +98,7 @@ Add me in your groups and give me full rights to make me function well.
 buttons = [
     [
         InlineKeyboardButton(
-            text="➕️ Add me to your chat ➕️", url="https://t.me/{bot.username}?startgroup=true"),
+            text="➕️ Add me to your chat ➕️", url=f"https://t.me/{bot.username}?startgroup=true"),
     ],
     [
         InlineKeyboardButton(text="Admin", callback_data="admin_back"),
