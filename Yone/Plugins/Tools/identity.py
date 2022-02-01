@@ -45,7 +45,7 @@ def astro(update: Update, context: CallbackContext):
         pass
     msg = message.reply_text("Fetching data...")
     try:
-        x = args
+        x = args[1]
         horoscope = pyaztro.Aztro(sign=x)
         mood = horoscope.mood
         lt = horoscope.lucky_time
@@ -72,10 +72,10 @@ def astro(update: Update, context: CallbackContext):
 
 
 __help__ = """
- - /hs <sign> 
+ ‣ `/hs <sign>`:
  Usage: it will show horoscope of daily of your sign.
  List of all signs - aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius, capricorn, aquarius and pisces.
- - /fakeid 
+ ‣ `/fakeid`:
  Usage: it will fake identity for you.
 """
 
