@@ -253,7 +253,27 @@ def yone_about_callback(update: Update, context: CallbackContext):
         query.message.edit_text(
                 PM_START_TEXT.format(
                         escape_markdown(first_name), escape_markdown(context.bot.first_name)),
-                reply_markup=InlineKeyboardMarkup(buttons),
+                reply_markup=InlineKeyboardMarkup([
+    [
+        InlineKeyboardButton(
+            text="➕️ Add me to your chat ➕️", url=f"https://t.me/{context.bot.username}?startgroup=true"),
+    ],
+    [
+        InlineKeyboardButton(text="Admin", callback_data="admin_back"),
+        InlineKeyboardButton(
+            text="Users", callback_data="user_back"
+        ),
+    ],
+    [
+        InlineKeyboardButton(text="Tools", callback_data="tools_back"),
+        InlineKeyboardButton(
+            text="Bot Info", callback_data="yone_"
+        ),
+    ],
+    [
+        InlineKeyboardButton(text="Helps & Commands❔", callback_data="help_back"),
+    ],
+]),
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
                 disable_web_page_preview=False,
