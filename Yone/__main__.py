@@ -1,4 +1,6 @@
-import time, re
+import time, re, psutil
+from platform import python_version
+
 from sys import argv
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.ext import (
@@ -8,7 +10,7 @@ from telegram.ext import (
     Filters,
     MessageHandler,
 )
-from telegram.utils.helpers import escape_markdown
+from telegram.utils.helpers import escape_markdown, mention_html
 from Yone.Handlers.validation import is_user_admin
 
 from telegram.error import (
@@ -96,7 +98,7 @@ Add me in your groups and give me full rights to make me function well.
 buttons = [
     [
         InlineKeyboardButton(
-            text="➕️ Add me to your chat ➕️", url="t.me/Yone_Robot?startgroup=true"),
+            text="➕️ Add me to your chat ➕️", url="https://t.me/{bot.username}?startgroup=true"),
     ],
     [
         InlineKeyboardButton(text="Admin", callback_data="admin_back"),
@@ -119,6 +121,11 @@ buttons = [
 
 def start(update: Update, context: CallbackContext):
     args = context.args
+    PHOTO = "https://telegra.ph/file/b749b0e80e82291e85e10.jpg"
+    bot = context.bot
+    message = update.effective_message
+    chat = update.effective_chat
+    user = update.effective_user
     first_name = update.effective_user.first_name
     uptime = get_readable_time((time.time() - StartTime))
     if update.effective_chat.type == "private":
@@ -179,12 +186,37 @@ def start(update: Update, context: CallbackContext):
                 timeout=60,
             )
     else:
-        update.effective_message.reply_text(
-            "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>".format(
-                uptime
-            ),
-            parse_mode=ParseMode.HTML,
-        )
+            text = (
+                f"Hello {mention_html(user.id, user.first_name)}, I'm {bot.first_name}\n\n"
+                f"┏━━━━━━━━━━━━━━━━━━━\n"
+                f"┣[• Owner : @{user.username}  \n"
+                f"┣[• Uptime : {uptime} \n"
+                f"┣[• Core : {psutil.cpu_percent()}%\n"
+                f"┣[• Python   : Ver {python_version()} \n"
+                f"┗━━━━━━━━━━━━━━━━━━━")
+        
+
+            keyboard = InlineKeyboardMarkup([
+                [
+                    InlineKeyboardButton(
+                        text="SUPPORT", 
+                        url=f"https://t.me/{SUPPORT_CHAT}"),
+                    InlineKeyboardButton(
+                        text="DEVLOPER", 
+                        url=f"https://t.me/{user.username}")
+                    
+                ],
+                
+                ])
+            message.reply_photo(
+                        PHOTO,
+                        caption=(text),
+                        reply_markup=keyboard,
+                        parse_mode=ParseMode.HTML,
+                        
+                    )
+
+                
 
 
 
