@@ -1,6 +1,6 @@
 #  COPYRIGHT (C) 2021 @NoobKittu
-import time, os, psutil
-from Yone import (SUPPORT_CHAT)
+import time, psutil
+from Yone import SUPPORT_CHAT
 from platform import python_version
 from Yone import StartTime, dispatcher
 from Yone.Plugins.disable import DisableAbleCommandHandler

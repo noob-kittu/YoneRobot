@@ -1,5 +1,4 @@
 import importlib, re
-from Yone.Plugins import ALL_MODULES
 from Yone import dispatcher, ALLOW_EXCL, LOGGER
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from Yone.Handlers.misc import paginate_modules
