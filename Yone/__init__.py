@@ -58,6 +58,7 @@ if ENV:
     ALLOW_EXCL = os.environ.get('ALLOW_EXCL', False)
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True)
 
+    OWNER_USERNAME = os.environ.get("OWNER_USERNAME", None)
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None)
     EVENT_LOGS = os.environ.get("EVENT_LOGS", None)
     JOIN_LOGGER = os.environ.get("JOIN_LOGGER", None)

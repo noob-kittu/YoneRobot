@@ -20,6 +20,7 @@ from telegram.error import (
 
 from Yone import (
     OWNER_ID,
+    OWNER_USERNAME,
     dispatcher, 
     StartTime,
     LOGGER,
@@ -98,7 +99,7 @@ Add me in your groups and give me full rights to make me function well.
 buttons = [
     [
         InlineKeyboardButton(
-            text="➕️ Add me to your chat ➕️", url=f"https://t.me/{bot.username}?startgroup=true"),
+            text="➕️ Add me to your chat ➕️", url=f"https://t.me/{context.bot.username}?startgroup=true"),
     ],
     [
         InlineKeyboardButton(text="Admin", callback_data="admin_back"),
@@ -189,7 +190,7 @@ def start(update: Update, context: CallbackContext):
             text = (
                 f"Hello {mention_html(user.id, user.first_name)}, I'm {bot.first_name}\n\n"
                 f"┏━━━━━━━━━━━━━━━━━━━\n"
-                f"┣[• Owner : @{user.username}  \n"
+                f"┣[• Owner : @{OWNER_USERNAME}  \n"
                 f"┣[• Uptime : {uptime} \n"
                 f"┣[• Core : {psutil.cpu_percent()}%\n"
                 f"┣[• Python   : Ver {python_version()} \n"
@@ -199,11 +200,11 @@ def start(update: Update, context: CallbackContext):
             keyboard = InlineKeyboardMarkup([
                 [
                     InlineKeyboardButton(
-                        text="SUPPORT", 
+                        text="NEWS", 
                         url=f"https://t.me/{SUPPORT_CHAT}"),
                     InlineKeyboardButton(
                         text="DEVLOPER", 
-                        url=f"https://t.me/{user.username}")
+                        url=f"https://t.me/{OWNER_USERNAME}")
                     
                 ],
                 
