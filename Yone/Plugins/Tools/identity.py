@@ -64,7 +64,7 @@ def astro(update: Update, context: CallbackContext):
             f"**Description :** `{desc}`\n"
         )
 
-        msg.edit_text(result)
+        msg.edit_text(result, parse_mode=ParseMode.MARKDOWN)
 
     except Exception as e:
         msg.edit_text(f"Sorry i haven't found anything!\nmaybe you have given a wrong sign name please check help of horoscope.\nError - {e}")
