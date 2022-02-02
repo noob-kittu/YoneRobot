@@ -252,7 +252,7 @@ def buttons(update: Update, context: CallbackContext):
     splitter = query.data.replace("report_", "").split("=")
     if splitter[1] == "kick":
         try:
-            bot.kickChatMember(splitter[0], splitter[2])
+            bot.banChatMember(splitter[0], splitter[2])
             bot.unbanChatMember(splitter[0], splitter[2])
             query.answer("✅ Succesfully kicked")
             return ""
@@ -265,7 +265,7 @@ def buttons(update: Update, context: CallbackContext):
             )
     elif splitter[1] == "banned":
         try:
-            bot.kickChatMember(splitter[0], splitter[2])
+            bot.banChatMember(splitter[0], splitter[2])
             query.answer("✅  Succesfully Banned")
             return ""
         except Exception as err:
