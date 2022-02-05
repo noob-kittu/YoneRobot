@@ -1,7 +1,9 @@
 from math import ceil
 from typing import Dict, List
-from telegram import InlineKeyboardButton, MAX_MESSAGE_LENGTH
+from telegram import InlineKeyboardButton, MAX_MESSAGE_LENGTH, ParseMode
 from Yone import NO_LOAD
+from telegram.error import TelegramError
+
 
 
 class EqInlineKeyboardButton(InlineKeyboardButton):
@@ -87,7 +89,21 @@ def build_keyboard_parser(bot, chat_id, buttons):
 
     return keyb
 
-
+def send_to_list(
+    bot: Bot, send_to: list, message: str, markdown=False, html=False,
+) -> None:
+    if html and markdown:
+        raise Exception("Can only send with either markdown or HTML!")
+    for user_id in set(send_to):
+        try:
+            if markdown:
+                bot.send_message(user_id, message, parse_mode=ParseMode.MARKDOWN)
+            elif html:
+                bot.send_message(user_id, message, parse_mode=ParseMode.HTML)
+            else:
+                bot.send_message(user_id, message)
+        except TelegramError:
+            pass  # ignore users who fail
 
 def split_message(msg: str) -> List[str]:
     if len(msg) < MAX_MESSAGE_LENGTH:
