@@ -11,7 +11,7 @@ r = telegraph.create_account(short_name=babe)
 auth_url = r["auth_url"]
 
 
-@tbot.on(events.NewMessage(pattern="^[!/]tg(m|t)(?!\S+)"))
+@tbot.on(events.NewMessage(pattern="^/tg(m|t)(?!\S+)"))
 async def tgraph(event):
     if event.fwd_from:
         return
