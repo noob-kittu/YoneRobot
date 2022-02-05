@@ -79,7 +79,7 @@ __help__ = """
  Usage: it will fake identity for you.
 """
 
-__mod_name__ = "Horoscope"
+__mod_name__ = "Identity"
 
 FAKER_HANDLER = DisableAbleCommandHandler("fakeid", fakeid, run_async=True)
 ASTRO_HANDLER = DisableAbleCommandHandler("hs", astro, run_async=True)
