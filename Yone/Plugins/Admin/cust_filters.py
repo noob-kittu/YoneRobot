@@ -156,7 +156,8 @@ def filters(update, context):
         if not text:
             send_message(
                 update.effective_message,
-                "There is no filter message - You can't JUST have buttons, you need a message to go with it!",
+                "There is no filter message - You can't JUST have buttons, "
+                "you need a message to go with it!",
             )
             return
 
@@ -199,7 +200,8 @@ def filters(update, context):
         if (msg.reply_to_message.text or msg.reply_to_message.caption) and not text:
             send_message(
                 update.effective_message,
-                "There is no filter message - You can't JUST have buttons, you need a message to go with it!",
+                "There is no filter message - You can't JUST have buttons, "
+                "you need a message to go with it!",
             )
             return
 
@@ -297,7 +299,10 @@ def reply_filter(update, context):
                 if filt.reply_text:
                     if "%%%" in filt.reply_text:
                         split = filt.reply_text.split("%%%")
-                        text = random.choice(split) if all(split) else filt.reply_text
+                        if all(split):
+                            text = random.choice(split)
+                        else:
+                            text = filt.reply_text
                     else:
                         text = filt.reply_text
                     if text.startswith("~!") and text.endswith("!~"):
