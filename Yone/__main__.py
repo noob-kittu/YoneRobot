@@ -30,6 +30,7 @@ from Yone import (
     PORT,
     URL,
     TOKEN,
+    PHOTO,
     telethn,
     updater)
 
@@ -93,7 +94,7 @@ I have lots of handy features such as:
 ‣ Approvals and much more.
 
 So what are you waiting for?
-Add me in your groups and give me full rights to make me function well.
+*Add me in your groups and give me full rights to make me function well.*
 """
 
 
@@ -101,7 +102,6 @@ Add me in your groups and give me full rights to make me function well.
 
 def start(update: Update, context: CallbackContext):
     args = context.args
-    PHOTO = "https://telegra.ph/file/b749b0e80e82291e85e10.jpg"
     bot = context.bot
     message = update.effective_message
     chat = update.effective_chat
@@ -199,7 +199,7 @@ def start(update: Update, context: CallbackContext):
             keyboard = InlineKeyboardMarkup([
                 [
                     InlineKeyboardButton(
-                        text="NEWS", 
+                        text="SUPPORT", 
                         url=f"https://t.me/{SUPPORT_CHAT}"),
                     InlineKeyboardButton(
                         text="DEVLOPER", 
