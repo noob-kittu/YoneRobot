@@ -86,6 +86,6 @@ __help__ = """
 
 __mod_name__ = "Telegraph"
 
-TELEGRAPH_HANDLER = tgraph, events.register(events.NewMessage(pattern=r"^[!/]tg(m|t)(?!\S+)"))
+TELEGRAPH_HANDLER = tgraph, events.register(events.NewMessage(pattern="^[!/]tg[m|t](?!\S+)"))
 tbot.add_event_handler(TELEGRAPH_HANDLER)
 
