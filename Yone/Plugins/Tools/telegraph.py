@@ -10,6 +10,8 @@ telegraph = Telegraph()
 r = telegraph.create_account(short_name=babe)
 auth_url = r["auth_url"]
 
+
+@tbot.on(events.NewMessage(pattern="^[!/]tg(m|t)(?!\S+)"))
 async def tgraph(event):
     if event.fwd_from:
         return
@@ -86,6 +88,4 @@ __help__ = """
 
 __mod_name__ = "Telegraph"
 
-TELEGRAPH_HANDLER = tgraph, events.register(events.NewMessage(pattern="^[!/]tg[m|t](?!\S+)"))
-tbot.add_event_handler(TELEGRAPH_HANDLER)
 
