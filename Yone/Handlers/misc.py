@@ -1,6 +1,6 @@
 from math import ceil
 from typing import Dict, List
-from telegram import InlineKeyboardButton, MAX_MESSAGE_LENGTH, ParseMode
+from telegram import InlineKeyboardButton, MAX_MESSAGE_LENGTH, ParseMode, Bot
 from Yone import NO_LOAD
 from telegram.error import TelegramError
 
