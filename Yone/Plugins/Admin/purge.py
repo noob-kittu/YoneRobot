@@ -178,7 +178,7 @@ PURGETO_HANDLER = purgeto_messages, events.NewMessage(pattern="^[!/]purgeto$")
 DEL_HANDLER = delete_messages, events.NewMessage(pattern="^[!/]del$")
 
 #PTB CMDs
-PURGEFROM_HANDLER = CommandHandler("purgefrom", purgefrom, filters=Filters.group, run_async=True)
+PURGEFROM_HANDLER = CommandHandler("purgefrom", purgefrom, filters=Filters.chat_type.group, run_async=True)
 dispatcher.add_handler(PURGEFROM_HANDLER)
 
 telethn.add_event_handler(*PURGE_HANDLER)
