@@ -30,11 +30,11 @@ def sketch(update: Update, context: CallbackContext):
                 pencil_sketch = cv2.divide(gray_image, inverted_blurred, scale=120.0)
 
 
-                filename = 'Sketch.jpg'
+                filename = 'sketch.jpg'
                 cv2.imwrite(filename, pencil_sketch)
                 ofile = open(filename, "rb")
                 message.reply_photo(
-                        ofile,
+                        filename,
                         caption="Made By @Yone_Robot",
                         parse_mode=ParseMode.HTML,
                         
