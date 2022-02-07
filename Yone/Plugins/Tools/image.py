@@ -46,7 +46,7 @@ def sketch(update: Update, context: CallbackContext):
 
     else:
         update.effective_message.reply_text(
-            "Please reply to a sticker for me to upload its PNG.",
+            "Please reply to an image to make a sketch.",
         )
 
 
