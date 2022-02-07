@@ -10,6 +10,7 @@ from telegram.ext import CallbackContext, run_async
 
 def sketch(update: Update, context: CallbackContext):
     bot = context.bot
+    chat_id = update.effective_chat.id
     message = update.effective_message
     if message.reply_to_message and message.reply_to_message.photo:
             file_id = message.reply_to_message.photo[-1].file_id
@@ -34,7 +35,8 @@ def sketch(update: Update, context: CallbackContext):
                 cv2.imwrite(filename, pencil_sketch)
                 ofile = open(filename, "rb")
                 message.reply_photo(
-                        filename,
+                        chat_id,
+                        ofile,
                         caption="Made By @Yone_Robot",
                         parse_mode=ParseMode.HTML,
                         
