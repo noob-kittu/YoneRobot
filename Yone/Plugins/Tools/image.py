@@ -22,6 +22,7 @@ def sketch(update: Update, context: CallbackContext):
                     file.seek(0)
                     #reading image
                     image = cv2.imread(file)
+                    print(image)
                     #converting BGR image to grayscale
                     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                     #image inversion
