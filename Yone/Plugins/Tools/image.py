@@ -18,31 +18,36 @@ def sketch(update: Update, context: CallbackContext):
                 new_file = bot.get_file(file_id)
                 new_file.download(out=file)
                 file.seek(0)
-                #reading image
-                image = cv2.imread(file)
-                #converting BGR image to grayscale
-                gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                #image inversion
-                inverted_image = 255 - gray_image
+            #reading image
+            image = cv2.imread(file)
+            #converting BGR image to grayscale
+            gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            #image inversion
+            inverted_image = 255 - gray_image
 
-                blurred = cv2.GaussianBlur(inverted_image, (21, 21), 0)
-                inverted_blurred = 255 - blurred
-                pencil_sketch = cv2.divide(gray_image, inverted_blurred, scale=120.0)
+            blurred = cv2.GaussianBlur(inverted_image, (21, 21), 0)
+            inverted_blurred = 255 - blurred
+            pencil_sketch = cv2.divide(gray_image, inverted_blurred, scale=120.0)
 
 
-                filename = 'Sketch.jpg'
-                cv2.imwrite(filename, pencil_sketch)
-                ofile = open(filename, "rb")
-                message.reply_photo(
-                     ofile,
-                     caption="Made By @Yone_Robot",
-                     parse_mode=ParseMode.HTML,
-                     
-                  )
-                if os.path.exists(file.name):
-                    os.remove(file.name)
-                if os.path.exists(filename):
-                    os.remove(filename)
+            filename = 'Sketch.jpg'
+            cv2.imwrite(filename, pencil_sketch)
+            ofile = open(filename, "rb")
+            message.reply_photo(
+                    ofile,
+                    caption="Made By @Yone_Robot",
+                    parse_mode=ParseMode.HTML,
+                    
+                )
+            if os.path.exists(file.name):
+                os.remove(file.name)
+            if os.path.exists(filename):
+                os.remove(filename)
+
+    else:
+        update.effective_message.reply_text(
+            "Please reply to a sticker for me to upload its PNG.",
+        )
 
 
 
