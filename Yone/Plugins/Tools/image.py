@@ -1,4 +1,5 @@
-import os, cv2
+import os
+import cv2
 from io import BytesIO
 from Yone import dispatcher
 from Yone.Plugins.disable import DisableAbleCommandHandler
