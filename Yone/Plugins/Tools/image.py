@@ -32,9 +32,9 @@ def sketch(update: Update, context: CallbackContext):
                     pencil_sketch = cv2.divide(gray_image, inverted_blurred, scale=120.0)
 
 
-                    filename = 'sketch.png'
-                    fsave = cv2.imwrite(filename, pencil_sketch)
-                    ofile = open(fsave, "rb")
+                    filename = 'my_sketch.png'
+                    cv2.imwrite(filename, pencil_sketch)
+                    ofile = open(filename, "rb")
                     bot.send_photo(chat_id, ofile)
                     if os.path.exists(file.name):
                         os.remove(file.name)
