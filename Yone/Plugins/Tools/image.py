@@ -34,13 +34,7 @@ def sketch(update: Update, context: CallbackContext):
                 filename = 'sketch.jpg'
                 cv2.imwrite(filename, pencil_sketch)
                 ofile = open(filename, "rb")
-                message.reply_photo(
-                        chat_id,
-                        ofile,
-                        caption="Made By @Yone_Robot",
-                        parse_mode=ParseMode.HTML,
-                        
-                    )
+                bot.send_photo(chat_id, ofile)
                 if os.path.exists(file.name):
                     os.remove(file.name)
                 if os.path.exists(filename):
