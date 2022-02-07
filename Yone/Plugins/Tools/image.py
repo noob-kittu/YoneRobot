@@ -12,38 +12,42 @@ def sketch(update: Update, context: CallbackContext):
     bot = context.bot
     chat_id = update.effective_chat.id
     message = update.effective_message
-    if message.reply_to_message and message.reply_to_message.photo:
-            file_id = message.reply_to_message.photo[-1].file_id
-            with BytesIO() as file:
-                file.name = 'getSketchfile.png'
-                new_file = bot.get_file(file_id)
-                new_file.download(out=file)
-                file.seek(0)
-                #reading image
-                image = cv2.imread(file)
-                #converting BGR image to grayscale
-                gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                #image inversion
-                inverted_image = 255 - gray_image
+    try:
+        if message.reply_to_message and message.reply_to_message.photo:
+                file_id = message.reply_to_message.photo[-1].file_id
+                with BytesIO() as file:
+                    file.name = 'getSketchfile.png'
+                    new_file = bot.get_file(file_id)
+                    new_file.download(out=file)
+                    file.seek(0)
+                    #reading image
+                    image = cv2.imread(file)
+                    #converting BGR image to grayscale
+                    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+                    #image inversion
+                    inverted_image = 255 - gray_image
 
-                blurred = cv2.GaussianBlur(inverted_image, (21, 21), 0)
-                inverted_blurred = 255 - blurred
-                pencil_sketch = cv2.divide(gray_image, inverted_blurred, scale=120.0)
+                    blurred = cv2.GaussianBlur(inverted_image, (21, 21), 0)
+                    inverted_blurred = 255 - blurred
+                    pencil_sketch = cv2.divide(gray_image, inverted_blurred, scale=120.0)
 
 
-                filename = 'sketch.png'
-                cv2.imwrite(filename, pencil_sketch)
-                ofile = open(filename, "rb")
-                bot.send_photo(chat_id, ofile)
-                if os.path.exists(file.name):
-                    os.remove(file.name)
-                if os.path.exists(filename):
-                    os.remove(filename)
+                    filename = 'sketch.png'
+                    cv2.imwrite(filename, pencil_sketch)
+                    ofile = open(filename, "rb")
+                    bot.send_photo(chat_id, ofile)
+                    if os.path.exists(file.name):
+                        os.remove(file.name)
+                    if os.path.exists(filename):
+                        os.remove(filename)
 
-    else:
-        update.effective_message.reply_text(
-            "Please reply to an image to make a sketch.",
-        )
+        else:
+            update.effective_message.reply_text(
+                "Please reply to an image to make a sketch.",
+            )
+
+    except Exception as e:
+      message.reply_text(f'Error Report @Yone_Support, {e}')
 
 
 
