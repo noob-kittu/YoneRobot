@@ -15,7 +15,7 @@ def sketch(update: Update, context: CallbackContext):
     if message.reply_to_message and message.reply_to_message.photo:
             file_id = message.reply_to_message.photo[-1].file_id
             with BytesIO() as file:
-                file.name = 'getSketchfile.png'
+                file.name = 'getSketchfile.jpg'
                 new_file = bot.get_file(file_id)
                 new_file.download(out=file)
                 file.seek(0)
