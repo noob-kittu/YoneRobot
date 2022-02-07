@@ -5,7 +5,7 @@ from Yone.Plugins.disable import DisableAbleCommandHandler
 from telegram import Update, ParseMode
 from telegram.ext import CallbackContext, run_async
 
-
+# Copyright - All Copyrights of this file is belong to kushal
 
 def sketch(update: Update, context: CallbackContext):
     bot = context.bot
