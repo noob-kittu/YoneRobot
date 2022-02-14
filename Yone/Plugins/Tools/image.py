@@ -20,8 +20,9 @@ def sketch(update: Update, context: CallbackContext):
                     new_file = bot.get_file(file_id)
                     new_file.download(out=file)
                     file.seek(0)
+                    opfile = open(file, "rb")
                     #reading image
-                    image = cv2.imread("getSketchfile.png")
+                    image = cv2.imread(opfile)
                     print(image)
                     #converting BGR image to grayscale
                     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
