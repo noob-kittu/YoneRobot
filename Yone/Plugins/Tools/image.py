@@ -19,7 +19,6 @@ def sketch(update: Update, context: CallbackContext):
                 newFile.download("getSketchfile.png")
                 #reading image
                 image = cv2.imread("getSketchfile.png")
-                print(image)
                 #converting BGR image to grayscale
                 gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                 #image inversion
