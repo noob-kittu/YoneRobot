@@ -31,7 +31,6 @@ from Yone.Database.approve_sql import is_approved
 FLOOD_GROUP = 3
 
 
-
 @loggable
 def check_flood(update, context) -> str:
     user = update.effective_user  # type: Optional[User]
@@ -44,10 +43,12 @@ def check_flood(update, context) -> str:
     if is_user_admin(chat, user.id) or user.id in INSPECTOR or user.id in REQUESTER:
         sql.update_flood(chat.id, None)
         return ""
+
     # ignore approved users
     if is_approved(chat.id, user.id):
         sql.update_flood(chat.id, None)
         return
+
     should_ban = sql.update_flood(chat.id, user.id)
     if not should_ban:
         return ""
@@ -55,11 +56,11 @@ def check_flood(update, context) -> str:
     try:
         getmode, getvalue = sql.get_flood_setting(chat.id)
         if getmode == 1:
-            chat.kick_member(user.id)
+            chat.ban_member(user.id)
             execstrings = "Banned"
             tag = "BANNED"
         elif getmode == 2:
-            chat.kick_member(user.id)
+            chat.ban_member(user.id)
             chat.unban_member(user.id)
             execstrings = "Kicked"
             tag = "KICKED"
@@ -71,7 +72,7 @@ def check_flood(update, context) -> str:
             tag = "MUTED"
         elif getmode == 4:
             bantime = extract_time(msg, getvalue)
-            chat.kick_member(user.id, until_date=bantime)
+            chat.ban_member(user.id, until_date=bantime)
             execstrings = f"Banned for {getvalue}"
             tag = "TBAN"
         elif getmode == 5:
@@ -84,9 +85,7 @@ def check_flood(update, context) -> str:
             )
             execstrings = f"Muted for {getvalue}"
             tag = "TMUTE"
-        send_message(
-            update.effective_message, f"Beep Boop! Boop Beep!\n{execstrings}!",
-        )
+        send_message(msg, f"Beep Boop! Boop Beep!\n{execstrings}!")
 
         return (
             "<b>{}:</b>"
@@ -111,7 +110,6 @@ def check_flood(update, context) -> str:
                 chat.title,
             )
         )
-
 
 
 @user_admin_no_reply
@@ -143,7 +141,6 @@ def flood_button(update: Update, context: CallbackContext):
             pass
 
 
-
 @user_admin
 @loggable
 def set_flood(update, context) -> str:
@@ -171,22 +168,18 @@ def set_flood(update, context) -> str:
         if val in ["off", "no", "0"]:
             sql.set_flood(chat_id, 0)
             if conn:
-                text = message.reply_text(
-                    f"Antiflood has been disabled in {chat_name}.",
-                )
+                message.reply_text(f"Antiflood has been disabled in {chat_name}.")
             else:
-                text = message.reply_text("Antiflood has been disabled.")
+                message.reply_text("Antiflood has been disabled.")
 
         elif val.isdigit():
             amount = int(val)
             if amount <= 0:
                 sql.set_flood(chat_id, 0)
                 if conn:
-                    text = message.reply_text(
-                        f"Antiflood has been disabled in {chat_name}.",
-                    )
+                    message.reply_text(f"Antiflood has been disabled in {chat_name}.")
                 else:
-                    text = message.reply_text("Antiflood has been disabled.")
+                    message.reply_text("Antiflood has been disabled.")
                 return (
                     "<b>{}:</b>"
                     "\n#SETFLOOD"
@@ -199,7 +192,7 @@ def set_flood(update, context) -> str:
 
             elif amount <= 3:
                 send_message(
-                    update.effective_message,
+                    message,
                     "Antiflood must be either 0 (disabled) or number greater than 3!",
                 )
                 return ""
@@ -207,15 +200,9 @@ def set_flood(update, context) -> str:
             else:
                 sql.set_flood(chat_id, amount)
                 if conn:
-                    text = message.reply_text(
-                        "Anti-flood has been set to {} in chat: {}".format(
-                            amount, chat_name,
-                        ),
-                    )
+                    message.reply_text(f"Anti-flood has been set to {amount} in chat: {chat_name}")
                 else:
-                    text = message.reply_text(
-                        f"Successfully updated anti-flood limit to {amount}!",
-                    )
+                    message.reply_text(f"Successfully updated anti-flood limit to {amount}!")
                 return (
                     "<b>{}:</b>"
                     "\n#SETFLOOD"
@@ -231,13 +218,10 @@ def set_flood(update, context) -> str:
             message.reply_text("Invalid argument please use a number, 'off' or 'no'")
     else:
         message.reply_text(
-            (
-                "Use `/setflood number` to enable anti-flood.\nOr use `/setflood off` to disable antiflood!."
-            ),
+            "Use `/setflood number` to enable anti-flood.\nOr use `/setflood off` to disable antiflood!.",
             parse_mode="markdown",
         )
     return ""
-
 
 
 def flood(update, context):
@@ -282,7 +266,6 @@ def flood(update, context):
             )
 
 
-
 @user_admin
 def set_flood_mode(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
@@ -318,20 +301,23 @@ def set_flood_mode(update, context):
             sql.set_flood_strength(chat_id, 3, "0")
         elif args[0].lower() == "tban":
             if len(args) == 1:
-                teks = """It looks like you tried to set time value for antiflood but you didn't specified time; Try, `/setfloodmode tban <timevalue>`.
-Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
-                send_message(update.effective_message, teks, parse_mode="markdown")
+                teks = (
+                    "It looks like you tried to set time value for antiflood "
+                    "but you didn't specified time; Try, `/setfloodmode tban <timevalue>`."
+                    "Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
+                )
+                send_message(msg, teks, parse_mode="markdown")
                 return
             settypeflood = f"tban for {args[1]}"
             sql.set_flood_strength(chat_id, 4, str(args[1]))
         elif args[0].lower() == "tmute":
             if len(args) == 1:
                 teks = (
-                    update.effective_message,
-                    """It looks like you tried to set time value for antiflood but you didn't specified time; Try, `/setfloodmode tmute <timevalue>`.
-Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.""",
+                    "It looks like you tried to set time value for antiflood "
+                    "but you didn't specified time; Try, `/setfloodmode tmute <timevalue>`."
+                    "Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
                 )
-                send_message(update.effective_message, teks, parse_mode="markdown")
+                send_message(msg, teks, parse_mode="markdown")
                 return
             settypeflood = f"tmute for {args[1]}"
             sql.set_flood_strength(chat_id, 5, str(args[1]))
