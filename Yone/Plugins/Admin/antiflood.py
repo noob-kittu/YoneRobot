@@ -218,7 +218,8 @@ def set_flood(update, context) -> str:
             message.reply_text("Invalid argument please use a number, 'off' or 'no'")
     else:
         message.reply_text(
-            "Use `/setflood number` to enable anti-flood.\nOr use `/setflood off` to disable antiflood!.",
+            "Use `/setflood number` to enable anti-flood.\n"
+            "Or use `/setflood off` to disable antiflood!.",
             parse_mode="markdown",
         )
     return ""
@@ -304,7 +305,8 @@ def set_flood_mode(update, context):
                 teks = (
                     "It looks like you tried to set time value for antiflood "
                     "but you didn't specified time; Try, `/setfloodmode tban <timevalue>`."
-                    "Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
+                    "Examples of time value: "
+                    "4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
                 )
                 send_message(msg, teks, parse_mode="markdown")
                 return
@@ -315,7 +317,8 @@ def set_flood_mode(update, context):
                 teks = (
                     "It looks like you tried to set time value for antiflood "
                     "but you didn't specified time; Try, `/setfloodmode tmute <timevalue>`."
-                    "Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
+                    "Examples of time value: "
+                    "4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
                 )
                 send_message(msg, teks, parse_mode="markdown")
                 return
