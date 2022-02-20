@@ -3,7 +3,7 @@ import re
 
 from telegram import ParseMode, ChatPermissions
 from telegram.error import BadRequest
-from telegram.ext import CommandHandler, MessageHandler, Filters, run_async
+from telegram.ext import CommandHandler, MessageHandler, Filters
 from telegram.utils.helpers import mention_html
 
 import Yone.Database.blacklist_sql as sql
@@ -20,7 +20,6 @@ from Yone.Database.approve_sql import is_approved
 from Yone.Handlers.alternate import send_message, typing_action
 
 BLACKLIST_GROUP = 11
-
 
  
 @user_admin
@@ -68,7 +67,6 @@ def blacklist(update, context):
         send_message(update.effective_message, text, parse_mode=ParseMode.HTML)
 
 
- 
 @user_admin
 @typing_action
 def add_blacklist(update, context):
@@ -119,7 +117,6 @@ def add_blacklist(update, context):
             update.effective_message,
             "Tell me which words you would like to add in blacklist.",
         )
-
 
  
 @user_admin
@@ -198,7 +195,6 @@ def unblacklist(update, context):
         )
 
 
- 
 @loggable
 @user_admin
 @typing_action
@@ -245,30 +241,39 @@ def blacklist_mode(update, context):
             sql.set_blacklist_strength(chat_id, 5, "0")
         elif args[0].lower() == "tban":
             if len(args) == 1:
-                teks = """It looks like you tried to set time value for blacklist but you didn't specified time; Try, `/blacklistmode tban <timevalue>`.
-				
-Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
-                send_message(update.effective_message, teks, parse_mode="markdown")
+                teks = (
+                    "It looks like you tried to set time value for blacklist "
+                    "but you didn't specified time; Try, `/blacklistmode tban <timevalue>`."
+                    "Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
+                )
+                send_message(msg, teks, parse_mode="markdown")
                 return ""
             restime = extract_time(msg, args[1])
             if not restime:
-                teks = """Invalid time value!
-Example of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
-                send_message(update.effective_message, teks, parse_mode="markdown")
+                teks = (
+                    "Invalid time value!"
+                    "Example of time value: `4m = 4 minutes`, `3h = 3 hours`, `6d = 6 days`, `5w = 5 weeks`."
+                )
+                send_message(msg, teks, parse_mode="markdown")
                 return ""
             settypeblacklist = "temporarily ban for {}".format(args[1])
             sql.set_blacklist_strength(chat_id, 6, str(args[1]))
         elif args[0].lower() == "tmute":
             if len(args) == 1:
-                teks = """It looks like you tried to set time value for blacklist but you didn't specified  time; try, `/blacklistmode tmute <timevalue>`.
-Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
-                send_message(update.effective_message, teks, parse_mode="markdown")
+                teks = (
+                    "It looks like you tried to set time value for blacklist "
+                    "but you didn't specified time; Try, `/blacklistmode tmute <timevalue>`."
+                    "Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
+                )
+                send_message(msg, teks, parse_mode="markdown")
                 return ""
             restime = extract_time(msg, args[1])
             if not restime:
-                teks = """Invalid time value!
-Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
-                send_message(update.effective_message, teks, parse_mode="markdown")
+                teks = (
+                    "Invalid time value!"
+                    "Example of time value: `4m = 4 minutes`, `3h = 3 hours`, `6d = 6 days`, `5w = 5 weeks`."
+                )
+                send_message(msg, teks, parse_mode="markdown")
                 return ""
             settypeblacklist = "temporarily mute for {}".format(args[1])
             sql.set_blacklist_strength(chat_id, 7, str(args[1]))
@@ -327,7 +332,6 @@ def findall(p, s):
     while i != -1:
         yield i
         i = s.find(p, i + 1)
-
 
  
 @user_not_admin
@@ -391,7 +395,7 @@ def del_blacklist(update, context):
                     return
                 elif getmode == 5:
                     message.delete()
-                    chat.kick_member(user.id)
+                    chat.ban_member(user.id)
                     bot.sendMessage(
                         chat.id,
                         f"Banned {user.first_name} for using Blacklisted word: {trigger}",
@@ -400,7 +404,7 @@ def del_blacklist(update, context):
                 elif getmode == 6:
                     message.delete()
                     bantime = extract_time(message, value)
-                    chat.kick_member(user.id, until_date=bantime)
+                    chat.ban_member(user.id, until_date=bantime)
                     bot.sendMessage(
                         chat.id,
                         f"Banned {user.first_name} until '{value}' for using Blacklisted word: {trigger}!",
