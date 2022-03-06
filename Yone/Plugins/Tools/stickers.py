@@ -139,6 +139,7 @@ def addsticker(update, context):
                 packname_found = 1
     kangsticker = "kangsticker.png"
     is_animated = False
+    is_video = False
     file_id = ""
 
     if message.reply_to_message:
@@ -152,12 +153,13 @@ def addsticker(update, context):
         elif message.reply_to_message.document:
             file_id = message.reply_to_message.document.file_id
         elif message.reply_to_message.video:
+            is_video = True
             file_id = message.reply_to_message.video.file_id
         else:
             message.reply_text("Yea, I can't kang that.")
 
         kang_file = context.bot.get_file(file_id)
-        if not is_animated:
+        if not is_animated or is_video:
             kang_file.download("kangsticker.png")
         elif is_animated:
             kang_file.download("kangsticker.tgs")
