@@ -370,16 +370,44 @@ def addsticker(update, context):
         else:
             # loading video dsa gfg intro video
             # and getting only first 5 seconds
-            clip1 = VideoFileClip("vidstic.webm").subclip(0, 3)
+            clip1 = VideoFileClip("vidstick.webm").subclip(0, 3)
             
             # getting width and height of clip 1
             w1 = clip1.w
             h1 = clip1.h
 
             #resizing video
-            clip2 = clip1.resize(0.5)
+            clip2 = clip1.resize(0.7)
             save = clip2.write_videofile("vidstick.webm")
+            
 
+            try:
+                context.bot.add_sticker_to_set(
+                        user_id=user.id,
+                        name=packname,
+                        webm_sticker=open("vidstick.webm", "rb"),
+                        emojis=sticker_emoji,
+                    )
+
+                edited_keyboard = InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="View Pack", url=f"t.me/addstickers/{packname}"
+                            )
+                        ]
+                    ]
+                )
+                adding_process.edit_text(
+                    f"<b>Your sticker has been added!</b>"
+                    f"\nEmoji Is : {sticker_emoji}",
+                    reply_markup=edited_keyboard,
+                    parse_mode=ParseMode.HTML
+                )
+            except Exception as e:
+                print(e)
+
+            
 
     elif args:
         try:
