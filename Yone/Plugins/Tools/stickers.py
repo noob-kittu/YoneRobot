@@ -546,6 +546,8 @@ def addsticker(update, context):
         os.remove("kangsticker.png")
     elif os.path.isfile("kangsticker.tgs"):
         os.remove("kangsticker.tgs")
+    elif os.path.isfile("vidstick.webm"):
+        os.remove("vidstick.webm")
 
 
 def makepack_internal(
