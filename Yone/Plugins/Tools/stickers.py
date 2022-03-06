@@ -463,7 +463,8 @@ def addsticker(update, context):
                     ]
                 ]
             )
-            adding_process.edit_text(
+            adding_process.delete()
+            message.send_message(
                 f"<b>Your sticker has been added!</b>"
                 f"\nEmoji Is : {sticker_emoji}",
                 reply_markup=edited_keyboard,
