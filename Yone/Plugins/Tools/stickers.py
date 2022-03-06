@@ -162,7 +162,7 @@ def addsticker(update, context):
         elif is_animated:
             kang_file.download("kangsticker.tgs")
         else:
-            kang_file.dowmload("vidstick.webm")
+            kang_file.download("vidstick.webm")
 
         if args:
             sticker_emoji = str(args[0])
