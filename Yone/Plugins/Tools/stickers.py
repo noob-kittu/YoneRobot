@@ -371,6 +371,28 @@ def addsticker(update, context):
                 print(e)
 
         else:
+            packname = "video" + str(user.id) + \
+                "_by_" + context.bot.username
+            packname_found = 0
+            max_stickers = 50
+            while packname_found == 0:
+                try:
+                    stickerset = context.bot.get_sticker_set(packname)
+                    if len(stickerset.stickers) >= max_stickers:
+                        packnum += 1
+                        packname = (
+                            "video"
+                            + str(packnum)
+                            + "_"
+                            + str(user.id)
+                            + "_by_"
+                            + context.bot.username
+                        )
+                    else:
+                        packname_found = 1
+                except TelegramError as e:
+                    if e.message == "Stickerset_invalid":
+                        packname_found = 1
             # loading video dsa gfg intro video
             # and getting only first 5 seconds
             clip1 = VideoFileClip("vidstick.webm").subclip(0, 3)
