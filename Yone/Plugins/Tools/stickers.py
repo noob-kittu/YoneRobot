@@ -154,7 +154,8 @@ def addsticker(update, context):
             file_id = message.reply_to_message.document.file_id
         elif message.reply_to_message.video:
             is_video = True
-            file_id = message.reply_to_message.video.file_id
+            file_id = message.reply_to_message.photo[-1].file_id
+            
         else:
             message.reply_text("Yea, I can't kang that.")
 
@@ -377,6 +378,8 @@ def addsticker(update, context):
             # getting width and height of clip 1
             w1 = clip1.w
             h1 = clip1.h
+
+            print(w1, "and", h1)
 
             #resizing video
             clip2 = clip1.resize(0.7)
