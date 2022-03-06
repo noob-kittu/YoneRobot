@@ -410,7 +410,7 @@ def addsticker(update, context):
                     parse_mode=ParseMode.HTML
                 )
             except Exception as e:
-                print(e)
+                message.reply_text(e)
 
             
 
