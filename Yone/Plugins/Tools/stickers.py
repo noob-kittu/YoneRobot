@@ -154,7 +154,7 @@ def addsticker(update, context):
             file_id = message.reply_to_message.document.file_id
         elif message.reply_to_message.video:
             is_video = True
-            file_id = message.reply_to_message.photo[-1].file_id
+            file_id = message.reply_to_message.video[-1].file_id
             
         else:
             message.reply_text("Yea, I can't kang that.")
