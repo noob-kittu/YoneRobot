@@ -4,6 +4,8 @@ from io import BytesIO
 from cloudscraper import CloudScraper
 import urllib.request as urllib
 from urllib.parse import quote as urlquote
+from moviepy.editor import *
+
 
 
 from PIL import Image
@@ -149,14 +151,18 @@ def addsticker(update, context):
             file_id = message.reply_to_message.photo[-1].file_id
         elif message.reply_to_message.document:
             file_id = message.reply_to_message.document.file_id
+        elif message.reply_to_message.video:
+            file_id = message.reply_to_message.video.file_id
         else:
             message.reply_text("Yea, I can't kang that.")
 
         kang_file = context.bot.get_file(file_id)
         if not is_animated:
             kang_file.download("kangsticker.png")
-        else:
+        elif is_animated:
             kang_file.download("kangsticker.tgs")
+        else:
+            kang_file.dowmload("vidstick.webm")
 
         if args:
             sticker_emoji = str(args[0])
@@ -283,7 +289,7 @@ def addsticker(update, context):
                     )
                 print(e)
 
-        else:
+        elif is_animated:
             packname = "animated" + str(user.id) + \
                 "_by_" + context.bot.username
             packname_found = 0
@@ -360,6 +366,20 @@ def addsticker(update, context):
                         parse_mode=ParseMode.HTML
                     )
                 print(e)
+
+        else:
+            # loading video dsa gfg intro video
+            # and getting only first 5 seconds
+            clip1 = VideoFileClip("vidstic.webm").subclip(0, 3)
+            
+            # getting width and height of clip 1
+            w1 = clip1.w
+            h1 = clip1.h
+
+            #resizing video
+            clip2 = clip1.resize(0.5)
+            save = clip2.write_videofile("vidstick.webm")
+
 
     elif args:
         try:
