@@ -110,6 +110,94 @@ def getsticker(update: Update, context: CallbackContext):
         )
 
 
+def vkang(update: Update, context: CallbackContext):
+    message = update.effective_message
+    user = update.effective_user
+    args = context.args
+    packnum = 0
+    packname = "Video" + str(user.id) + "_by_" + context.bot.username
+    packname_found = 0
+    max_stickers = 120
+
+    while packname_found == 0:
+        try:
+            stickerset = context.bot.get_sticker_set(packname)
+            if len(stickerset.stickers) >= max_stickers:
+                packnum += 1
+                packname = (
+                    "Video"
+                    + str(packnum)
+                    + "_"
+                    + str(user.id)
+                    + "_by_"
+                    + context.bot.username
+                )
+            else:
+                packname_found = 1
+        except TelegramError as e:
+            if e.message == "Stickerset_invalid":
+                packname_found = 1
+
+        if message.reply_to_message.video:
+            is_video = True
+            file_id = message.reply_to_message.video[-1].file_id
+            kang_file = context.bot.get_file(file_id)
+            kang_file.download("vidstick.webm")
+
+        if args:
+            sticker_emoji = str(args[0])
+        elif message.reply_to_message.sticker and message.reply_to_message.sticker.emoji:
+            sticker_emoji = message.reply_to_message.sticker.emoji
+        else:
+            sticker_emoji = "🙂"
+
+        adding_process = message.reply_text(
+            "<b>Your sticker will be added in few seconds, please wait...</b>",
+            parse_mode=ParseMode.HTML
+        )
+
+        try:
+            # and getting only first 5 seconds
+            clip1 = VideoFileClip("vidstick.webm").subclip(0, 3)
+            
+            # getting width and height of clip 1
+            w1 = clip1.w
+            h1 = clip1.h
+
+            print(w1, "and", h1)
+
+            #resizing video
+            clip2 = clip1.resize(0.7)
+            save = clip2.write_videofile("vidstick.webm")
+            
+            context.bot.add_sticker_to_set(
+                        user_id=user.id,
+                        name=packname,
+                        webm_sticker=open("vidstick.webm", "rb"),
+                        emojis=sticker_emoji,
+                    )
+
+            edited_keyboard = InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="View Pack", url=f"t.me/addstickers/{packname}"
+                            )
+                        ]
+                    ]
+                )
+            adding_process.edit_text(
+                    f"<b>Your sticker has been added!</b>"
+                    f"\nEmoji Is : {sticker_emoji}",
+                    reply_markup=edited_keyboard,
+                    parse_mode=ParseMode.HTML
+                )
+        except Exception as e:
+            message.reply_text(e)
+
+        if os.path.isfile("vidstick.webm"):
+            os.remove("vidstick.webm")
+
 def addsticker(update, context):
     message = update.effective_message
     user = update.effective_user
@@ -139,7 +227,6 @@ def addsticker(update, context):
                 packname_found = 1
     kangsticker = "kangsticker.png"
     is_animated = False
-    is_video = False
     file_id = ""
 
     if message.reply_to_message:
@@ -152,15 +239,12 @@ def addsticker(update, context):
             file_id = message.reply_to_message.photo[-1].file_id
         elif message.reply_to_message.document:
             file_id = message.reply_to_message.document.file_id
-        elif message.reply_to_message.video:
-            is_video = True
-            file_id = message.reply_to_message.video[-1].file_id
             
         else:
             message.reply_text("Yea, I can't kang that.")
 
         kang_file = context.bot.get_file(file_id)
-        if not is_animated or is_video:
+        if not is_animated:
             kang_file.download("kangsticker.png")
         elif is_animated:
             kang_file.download("kangsticker.tgs")
@@ -292,7 +376,7 @@ def addsticker(update, context):
                     )
                 print(e)
 
-        elif is_animated:
+        else:
             packname = "animated" + str(user.id) + \
                 "_by_" + context.bot.username
             packname_found = 0
@@ -369,70 +453,7 @@ def addsticker(update, context):
                         parse_mode=ParseMode.HTML
                     )
                 print(e)
-
-        else:
-            packname = "video" + str(user.id) + \
-                "_by_" + context.bot.username
-            packname_found = 0
-            max_stickers = 50
-            while packname_found == 0:
-                try:
-                    stickerset = context.bot.get_sticker_set(packname)
-                    if len(stickerset.stickers) >= max_stickers:
-                        packnum += 1
-                        packname = (
-                            "video"
-                            + str(packnum)
-                            + "_"
-                            + str(user.id)
-                            + "_by_"
-                            + context.bot.username
-                        )
-                    else:
-                        packname_found = 1
-                except TelegramError as e:
-                    if e.message == "Stickerset_invalid":
-                        packname_found = 1
-            # loading video dsa gfg intro video
-            # and getting only first 5 seconds
-            clip1 = VideoFileClip("vidstick.webm").subclip(0, 3)
             
-            # getting width and height of clip 1
-            w1 = clip1.w
-            h1 = clip1.h
-
-            print(w1, "and", h1)
-
-            #resizing video
-            clip2 = clip1.resize(0.7)
-            save = clip2.write_videofile("vidstick.webm")
-            
-
-            try:
-                context.bot.add_sticker_to_set(
-                        user_id=user.id,
-                        name=packname,
-                        webm_sticker=open("vidstick.webm", "rb"),
-                        emojis=sticker_emoji,
-                    )
-
-                edited_keyboard = InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                text="View Pack", url=f"t.me/addstickers/{packname}"
-                            )
-                        ]
-                    ]
-                )
-                adding_process.edit_text(
-                    f"<b>Your sticker has been added!</b>"
-                    f"\nEmoji Is : {sticker_emoji}",
-                    reply_markup=edited_keyboard,
-                    parse_mode=ParseMode.HTML
-                )
-            except Exception as e:
-                message.reply_text(e)
 
             
 
@@ -574,8 +595,7 @@ def addsticker(update, context):
         os.remove("kangsticker.png")
     elif os.path.isfile("kangsticker.tgs"):
         os.remove("kangsticker.tgs")
-    elif os.path.isfile("vidstick.webm"):
-        os.remove("vidstick.webm")
+    
 
 
 def makepack_internal(
@@ -835,6 +855,8 @@ __mod_name__ = "Stickers"
 
 KANG_HANDLER = DisableAbleCommandHandler(
     ["addsticker", "kang", "steal"], addsticker, pass_args=True, run_async=True)
+VKANG_HANDLER = DisableAbleCommandHandler(
+    ["addvsticker", "vkang", "vsteal"], vkang, pass_args=True, run_async=True)
 DEL_HANDLER = DisableAbleCommandHandler(
     "delsticker", delsticker, run_async=True)
 STICKERID_HANDLER = DisableAbleCommandHandler(
@@ -852,6 +874,7 @@ STICKERS_HANDLER = DisableAbleCommandHandler(
 CBSCALLBACK_HANDLER = CallbackQueryHandler(
     cbs_callback, pattern='cbs_', run_async=True)
 dispatcher.add_handler(KANG_HANDLER)
+dispatcher.add_handler(VKANG_HANDLER)
 dispatcher.add_handler(DEL_HANDLER)
 dispatcher.add_handler(STICKERID_HANDLER)
 dispatcher.add_handler(ADD_FSTICKER_HANDLER)
