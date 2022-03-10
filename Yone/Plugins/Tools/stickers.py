@@ -110,6 +110,7 @@ def getsticker(update: Update, context: CallbackContext):
         )
 
 
+
 def vkang(update: Update, context: CallbackContext):
     message = update.effective_message
     user = update.effective_user
@@ -158,7 +159,7 @@ def vkang(update: Update, context: CallbackContext):
 
         try:
             # and getting only first 5 seconds
-            clip1 = VideoFileClip("vidstick.webm").subclip(0, 3)
+            clip1 = VideoFileClip("vidstick.webm").subclip(0, 2)
             
             # getting width and height of clip 1
             w1 = clip1.w
