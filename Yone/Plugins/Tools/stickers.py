@@ -4,7 +4,6 @@ from io import BytesIO
 from cloudscraper import CloudScraper
 import urllib.request as urllib
 from urllib.parse import quote as urlquote
-from moviepy.editor import *
 
 
 
@@ -109,95 +108,6 @@ def getsticker(update: Update, context: CallbackContext):
             "Please reply to a sticker for me to upload its PNG.",
         )
 
-
-
-def vkang(update: Update, context: CallbackContext):
-    message = update.effective_message
-    user = update.effective_user
-    args = context.args
-    packnum = 0
-    packname = "Video" + str(user.id) + "_by_" + context.bot.username
-    packname_found = 0
-    max_stickers = 120
-
-    while packname_found == 0:
-        try:
-            stickerset = context.bot.get_sticker_set(packname)
-            if len(stickerset.stickers) >= max_stickers:
-                packnum += 1
-                packname = (
-                    "Video"
-                    + str(packnum)
-                    + "_"
-                    + str(user.id)
-                    + "_by_"
-                    + context.bot.username
-                )
-            else:
-                packname_found = 1
-        except TelegramError as e:
-            if e.message == "Stickerset_invalid":
-                packname_found = 1
-
-        if message.reply_to_message.video:
-            is_video = True
-            file_id = message.reply_to_message.video[-1].file_id
-            kang_file = context.bot.get_file(file_id)
-            kang_file.download("vidstick.webm")
-
-        if args:
-            sticker_emoji = str(args[0])
-        elif message.reply_to_message.sticker and message.reply_to_message.sticker.emoji:
-            sticker_emoji = message.reply_to_message.sticker.emoji
-        else:
-            sticker_emoji = "🙂"
-
-        adding_process = message.reply_text(
-            "<b>Your sticker will be added in few seconds, please wait...</b>",
-            parse_mode=ParseMode.HTML
-        )
-
-        try:
-            # and getting only first 5 seconds
-            clip1 = VideoFileClip("vidstick.webm").subclip(0, 2)
-            
-            # getting width and height of clip 1
-            w1 = clip1.w
-            h1 = clip1.h
-
-            print(w1, "and", h1)
-
-            #resizing video
-            clip2 = clip1.resize(0.7)
-            save = clip2.write_videofile("vidstick.webm")
-            
-            context.bot.add_sticker_to_set(
-                        user_id=user.id,
-                        name=packname,
-                        webm_sticker=open("vidstick.webm", "rb"),
-                        emojis=sticker_emoji,
-                    )
-
-            edited_keyboard = InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                text="View Pack", url=f"t.me/addstickers/{packname}"
-                            )
-                        ]
-                    ]
-                )
-            adding_process.edit_text(
-                    f"<b>Your sticker has been added!</b>"
-                    f"\nEmoji Is : {sticker_emoji}",
-                    reply_markup=edited_keyboard,
-                    parse_mode=ParseMode.HTML
-                )
-        except Exception as e:
-            message.reply_text(e)
-
-        if os.path.isfile("vidstick.webm"):
-            os.remove("vidstick.webm")
 
 def addsticker(update, context):
     message = update.effective_message
@@ -856,8 +766,6 @@ __mod_name__ = "Stickers"
 
 KANG_HANDLER = DisableAbleCommandHandler(
     ["addsticker", "kang", "steal"], addsticker, pass_args=True, run_async=True)
-VKANG_HANDLER = DisableAbleCommandHandler(
-    ["addvsticker", "vkang", "vsteal"], vkang, pass_args=True, run_async=True)
 DEL_HANDLER = DisableAbleCommandHandler(
     "delsticker", delsticker, run_async=True)
 STICKERID_HANDLER = DisableAbleCommandHandler(
@@ -875,7 +783,6 @@ STICKERS_HANDLER = DisableAbleCommandHandler(
 CBSCALLBACK_HANDLER = CallbackQueryHandler(
     cbs_callback, pattern='cbs_', run_async=True)
 dispatcher.add_handler(KANG_HANDLER)
-dispatcher.add_handler(VKANG_HANDLER)
 dispatcher.add_handler(DEL_HANDLER)
 dispatcher.add_handler(STICKERID_HANDLER)
 dispatcher.add_handler(ADD_FSTICKER_HANDLER)
