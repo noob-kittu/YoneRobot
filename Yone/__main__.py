@@ -30,6 +30,7 @@ from Yone import (
     PORT,
     URL,
     TOKEN,
+    PHOTO,
     telethn,
     updater)
 
@@ -82,18 +83,10 @@ def get_readable_time(seconds: int) -> str:
     return ping_time
 
 
-PM_START_TEXT = """ Hello *{}*, My name is *{}*! 
-A telegram group management bot. I'm here to help you to manage your groups.
-I have lots of handy features such as:
-‣ Warning system
-‣ Artificial intelligence
-‣ Flood control system
-‣ Note keeping system
-‣ Filters keeping system
-‣ Approvals and much more.
-
+PM_START_TEXT = """ Hello *{}*, My name is *{}*! [O](https://telegra.ph/file/b39d9ee3064c0867ff9fb.mp4)
+ I am an Anime Themed advance group management bot with a lots of Features.
 So what are you waiting for?
-Add me in your groups and give me full rights to make me function well.
+*Add me in your groups and give me full rights to make me function well.*
 """
 
 
@@ -101,7 +94,6 @@ Add me in your groups and give me full rights to make me function well.
 
 def start(update: Update, context: CallbackContext):
     args = context.args
-    PHOTO = "https://telegra.ph/file/b749b0e80e82291e85e10.jpg"
     bot = context.bot
     message = update.effective_message
     chat = update.effective_chat
@@ -164,7 +156,7 @@ def start(update: Update, context: CallbackContext):
                 reply_markup=InlineKeyboardMarkup([
     [
         InlineKeyboardButton(
-            text="➕️ Add me to your chat ➕️", url=f"https://t.me/{context.bot.username}?startgroup=true"),
+            text=" Add Goku to your chat ", url=f"https://t.me/{context.bot.username}?startgroup=true"),
     ],
     [
         InlineKeyboardButton(text="Admin", callback_data="admin_back"),
@@ -199,7 +191,7 @@ def start(update: Update, context: CallbackContext):
             keyboard = InlineKeyboardMarkup([
                 [
                     InlineKeyboardButton(
-                        text="NEWS", 
+                        text="SUPPORT", 
                         url=f"https://t.me/{SUPPORT_CHAT}"),
                     InlineKeyboardButton(
                         text="DEVLOPER", 
@@ -240,8 +232,8 @@ def yone_about_callback(update: Update, context: CallbackContext):
             reply_markup=InlineKeyboardMarkup(
                 [
                    [
-                     InlineKeyboardButton(text="Support", url="t.me/Yone_Support"),
-                     InlineKeyboardButton(text="News", url="t.me/Yone_Updates"),
+                     InlineKeyboardButton(text="Support", url="t.me/Monkey_D_Luffy_Support"),
+                     InlineKeyboardButton(text="Owner", url="t.me/Dhairya_g"),
                    ],
                    [
                     InlineKeyboardButton(text="Back", callback_data="yone_back")
@@ -284,7 +276,7 @@ def main():
 
     if SUPPORT_CHAT is not None and isinstance(SUPPORT_CHAT, str):
         try:
-            stringz = "My dear Owner , I'm Working Again. Thanks to make me live."
+            stringz = "My dear Owner , Luffy Is Working . Thanks for making me alive."
             dispatcher.bot.sendMessage(f"@{OWNER_ID}", stringz)
         except Unauthorized:
             LOGGER.warning(
