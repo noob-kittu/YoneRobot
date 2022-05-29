@@ -157,10 +157,10 @@ def start(update: Update, context: CallbackContext):
                 reply_markup=InlineKeyboardMarkup([
     [
         InlineKeyboardButton(
-            text="➕️ Add me to your chat ➕️", url=f"https://t.me/{context.bot.username}?startgroup=true"),
+            text="➕️ ᴀᴅᴅ ᴍɪss ǫᴜᴇᴇɴ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ➕️", url=f"https://t.me/{context.bot.username}?startgroup=true"),
     ],
     [
-        InlineKeyboardButton(text="Admin", callback_data="admin_back"),
+        InlineKeyboardButton(text="Aᴅᴍɪɴ", callback_data="admin_back"),
         InlineKeyboardButton(
             text="Users", callback_data="user_back"
         ),
@@ -172,7 +172,7 @@ def start(update: Update, context: CallbackContext):
         ),
     ],
     [
-        InlineKeyboardButton(text="Helps & Commands❔", callback_data="help_back"),
+        InlineKeyboardButton(text="ʜᴇʟᴘ & ᴄᴏᴍᴍᴀɴᴅꜱ", callback_data="help_back"),
     ],
 ]),
                 parse_mode=ParseMode.MARKDOWN,
@@ -180,22 +180,22 @@ def start(update: Update, context: CallbackContext):
             )
     else:
             text = (
-                f"Hello {mention_html(user.id, user.first_name)}, I'm {bot.first_name}\n\n"
+                f"Hᴇʟʟᴏ {mention_html(user.id, user.first_name)}, I ' ᴍ {bot.first_name}\n\n"
                 f"┏━━━━━━━━━━━━━━━━━━━\n"
-                f"┣[• Owner : @{OWNER_USERNAME}  \n"
-                f"┣[• Uptime : {uptime} \n"
-                f"┣[• Core : {psutil.cpu_percent()}%\n"
-                f"┣[• Python   : Ver {python_version()} \n"
+                f"┣[• ᴏᴡɴᴇʀ : ǫᴜᴇᴇɴ ʙᴀʙʏ  \n"
+                f"┣[• ᴜᴘᴛɪᴍᴇ : {uptime} \n"
+                f"┣[• ᴄᴏʀᴇ : {psutil.cpu_percent()}%\n"
+                f"┣[• ᴘʏᴛʜᴏɴ   : Ver {python_version()} \n"
                 f"┗━━━━━━━━━━━━━━━━━━━")
         
 
             keyboard = InlineKeyboardMarkup([
                 [
                     InlineKeyboardButton(
-                        text="SUPPORT", 
+                        text="Sᴜᴘᴘᴏʀᴛ", 
                         url=f"https://t.me/{SUPPORT_CHAT}"),
                     InlineKeyboardButton(
-                        text="DEVLOPER", 
+                        text="Dᴇᴠ", 
                         url=f"https://t.me/{OWNER_USERNAME}")
                     
                 ],
@@ -233,8 +233,8 @@ def yone_about_callback(update: Update, context: CallbackContext):
             reply_markup=InlineKeyboardMarkup(
                 [
                    [
-                     InlineKeyboardButton(text="Support", url="t.me/Yone_Support"),
-                     InlineKeyboardButton(text="News", url="t.me/Yone_Updates"),
+                     InlineKeyboardButton(text="Sᴜᴘᴘᴏʀᴛ", url="t.me/DARK_WEB_ARMY"),
+                     InlineKeyboardButton(text="Nᴇᴡs", url="t.me/DARK_WEB_NETWORK"),
                    ],
                    [
                     InlineKeyboardButton(text="Back", callback_data="yone_back")
@@ -249,22 +249,22 @@ def yone_about_callback(update: Update, context: CallbackContext):
                 reply_markup=InlineKeyboardMarkup([
     [
         InlineKeyboardButton(
-            text="➕️ Add me to your chat ➕️", url=f"https://t.me/{context.bot.username}?startgroup=true"),
+            text="➕️ ᴀᴅᴅ ᴍɪss ǫᴜᴇᴇɴ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ➕️", url=f"https://t.me/{context.bot.username}?startgroup=true"),
     ],
     [
-        InlineKeyboardButton(text="Admin", callback_data="admin_back"),
+        InlineKeyboardButton(text="Aᴅᴍɪɴ", callback_data="admin_back"),
         InlineKeyboardButton(
             text="Users", callback_data="user_back"
         ),
     ],
     [
-        InlineKeyboardButton(text="Tools", callback_data="tools_back"),
+        InlineKeyboardButton(text="Tᴏᴏʟs", callback_data="tools_back"),
         InlineKeyboardButton(
             text="Bot Info", callback_data="yone_"
         ),
     ],
     [
-        InlineKeyboardButton(text="Helps & Commands❔", callback_data="help_back"),
+        InlineKeyboardButton(text="Hᴇʟᴘ ᴀɴᴅ Cᴏᴍᴍᴀɴᴅ", callback_data="help_back"),
     ],
 ]),
                 parse_mode=ParseMode.MARKDOWN,
@@ -278,7 +278,7 @@ def main():
     if SUPPORT_CHAT is not None and isinstance(SUPPORT_CHAT, str):
         try:
             stringz = "My dear Owner , I'm Working Again. Thanks to make me live."
-            dispatcher.bot.sendMessage(f"@{OWNER_ID}", stringz)
+            dispatcher.bot.sendMessage(f"ǫᴜᴇᴇɴ ʙᴀʙʏ", stringz)
         except Unauthorized:
             LOGGER.warning(
                 "Bot isnt able to send message to support_chat, go and check!"
