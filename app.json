@@ -73,12 +73,12 @@
     },      
     "DEV_USERS": {
        "description": "ID of users who are Devs of your bot (can use /py etc.). If you are a noob and would come and bother Masha support then keep the current ID's here at they are and add yours.",
-       "required": false,
+       "required": true,
        "value": ""
     },
     "INSPECTOR": {
        "description": "A space separated list of user IDs who you want to assign as inspector users.",
-       "required": false,
+       "required": true,
        "value": ""
     },
     "REQUESTER": {
