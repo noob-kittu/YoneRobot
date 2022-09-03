@@ -7,7 +7,7 @@ git+https://github.com/trentm/python-markdown2.git
 future
 psycopg2-binary
 bleach
-emoji
+emoji==1.6.3
 requests
 humanize
 speedtest-cli
