@@ -93,11 +93,8 @@ PERM_GROUP = 1
 REST_GROUP = 2
 
 def alltypes():
-    lall = []
-    for i in LOCK_TYPES:
-        lall.append(i)
-    for i in LOCK_CHAT_RESTRICTION:
-        lall.append(i)
+    lall = list(LOCK_TYPES)
+    lall.extend(iter(LOCK_CHAT_RESTRICTION))
     return lall
 
 # NOT ASYNC
@@ -105,8 +102,6 @@ def restr_members(
     bot, chat_id, members, messages=False, media=False, other=False, previews=False,
 ):
     for mem in members:
-        if mem.user in INSPECTOR:
-            pass
         try:
             bot.restrict_chat_member(
                 chat_id,

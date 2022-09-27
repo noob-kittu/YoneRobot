@@ -14,7 +14,7 @@ class ReportingUserSettings(BASE):
         self.user_id = user_id
 
     def __repr__(self):
-        return "<User report settings ({})>".format(self.user_id)
+        return f"<User report settings ({self.user_id})>"
 
 
 class ReportingChatSettings(BASE):
@@ -26,7 +26,7 @@ class ReportingChatSettings(BASE):
         self.chat_id = str(chat_id)
 
     def __repr__(self):
-        return "<Chat report settings ({})>".format(self.chat_id)
+        return f"<Chat report settings ({self.chat_id})>"
 
 
 ReportingUserSettings.__table__.create(checkfirst=True)
@@ -38,8 +38,9 @@ USER_LOCK = threading.RLock()
 
 def chat_should_report(chat_id: Union[str, int]) -> bool:
     try:
-        chat_setting = SESSION.query(ReportingChatSettings).get(str(chat_id))
-        if chat_setting:
+        if chat_setting := SESSION.query(ReportingChatSettings).get(
+            str(chat_id)
+        ):
             return chat_setting.should_report
         return False
     finally:
@@ -48,8 +49,7 @@ def chat_should_report(chat_id: Union[str, int]) -> bool:
 
 def user_should_report(user_id: int) -> bool:
     try:
-        user_setting = SESSION.query(ReportingUserSettings).get(user_id)
-        if user_setting:
+        if user_setting := SESSION.query(ReportingUserSettings).get(user_id):
             return user_setting.should_report
         return True
     finally:

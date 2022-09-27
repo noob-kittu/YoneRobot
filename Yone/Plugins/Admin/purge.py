@@ -132,19 +132,16 @@ async def purgeto_messages(event):
         await event.reply("Reply to a message to select where to start purging from.")
         return
 
-    messages = []
-
     x = sql.show_purgefrom(event.chat_id)
     for i in x:
         try:
             message_id = int(i.message_from)
-            message_from_ids = []
-            message_from_ids.append(int(i.message_from))
+            message_from_ids = [int(i.message_from)]
             for message_from in message_from_ids:
                 sql.clear_purgefrom(msg.chat_id, message_from)
         except:
             pass
-    messages.append(message_id)
+    messages = [message_id]
     delete_to = reply_msg.id
 
     for msg_id in range(message_id, delete_to + 1):

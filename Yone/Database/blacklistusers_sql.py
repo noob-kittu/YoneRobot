@@ -35,8 +35,7 @@ def blacklist_user(user_id, reason=None):
 
 def unblacklist_user(user_id):
     with BLACKLIST_LOCK:
-        user = SESSION.query(BlacklistUsers).get(str(user_id))
-        if user:
+        if user := SESSION.query(BlacklistUsers).get(str(user_id)):
             SESSION.delete(user)
 
         SESSION.commit()
@@ -44,11 +43,10 @@ def unblacklist_user(user_id):
 
 
 def get_reason(user_id):
-    user = SESSION.query(BlacklistUsers).get(str(user_id))
-    rep = ""
-    if user:
+    if user := SESSION.query(BlacklistUsers).get(str(user_id)):
         rep = user.reason
-
+    else:
+        rep = ""
     SESSION.close()
     return rep
 

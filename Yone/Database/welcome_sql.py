@@ -248,9 +248,7 @@ class Welcome(BASE):
         self.should_goodbye = should_goodbye
 
     def __repr__(self):
-        return "<Chat {} should Welcome new users: {}>".format(
-            self.chat_id, self.should_welcome,
-        )
+        return f"<Chat {self.chat_id} should Welcome new users: {self.should_welcome}>"
 
 
 class WelcomeButtons(BASE):
@@ -333,8 +331,7 @@ CS_LOCK = threading.RLock()
 
 def welcome_mutes(chat_id):
     try:
-        welcomemutes = SESSION.query(WelcomeMute).get(str(chat_id))
-        if welcomemutes:
+        if welcomemutes := SESSION.query(WelcomeMute).get(str(chat_id)):
             return welcomemutes.welcomemutes
         return False
     finally:
@@ -343,8 +340,7 @@ def welcome_mutes(chat_id):
 
 def set_welcome_mutes(chat_id, welcomemutes):
     with WM_LOCK:
-        prev = SESSION.query(WelcomeMute).get(str(chat_id))
-        if prev:
+        if prev := SESSION.query(WelcomeMute).get(str(chat_id)):
             SESSION.delete(prev)
         welcome_m = WelcomeMute(str(chat_id), welcomemutes)
         SESSION.add(welcome_m)
@@ -369,10 +365,7 @@ def set_human_checks(user_id, chat_id):
 def get_human_checks(user_id, chat_id):
     try:
         human_check = SESSION.query(WelcomeMuteUsers).get((user_id, str(chat_id)))
-        if not human_check:
-            return None
-        human_check = human_check.human_check
-        return human_check
+        return human_check.human_check if human_check else None
     finally:
         SESSION.close()
 
@@ -381,10 +374,7 @@ def get_welc_mutes_pref(chat_id):
     welcomemutes = SESSION.query(WelcomeMute).get(str(chat_id))
     SESSION.close()
 
-    if welcomemutes:
-        return welcomemutes.welcomemutes
-
-    return False
+    return welcomemutes.welcomemutes if welcomemutes else False
 
 
 def get_welc_pref(chat_id):
@@ -429,10 +419,7 @@ def get_clean_pref(chat_id):
     welc = SESSION.query(Welcome).get(str(chat_id))
     SESSION.close()
 
-    if welc:
-        return welc.clean_welcome
-
-    return False
+    return welc.clean_welcome if welc else False
 
 
 def set_welc_preference(chat_id, should_welcome):
@@ -578,8 +565,9 @@ def get_gdbye_buttons(chat_id):
 
 def clean_service(chat_id: Union[str, int]) -> bool:
     try:
-        chat_setting = SESSION.query(CleanServiceSetting).get(str(chat_id))
-        if chat_setting:
+        if chat_setting := SESSION.query(CleanServiceSetting).get(
+            str(chat_id)
+        ):
             return chat_setting.clean_service
         return False
     finally:
@@ -599,8 +587,7 @@ def set_clean_service(chat_id: Union[int, str], setting: bool):
 
 def migrate_chat(old_chat_id, new_chat_id):
     with INSERTION_LOCK:
-        chat = SESSION.query(Welcome).get(str(old_chat_id))
-        if chat:
+        if chat := SESSION.query(Welcome).get(str(old_chat_id)):
             chat.chat_id = str(new_chat_id)
 
         with WELC_BTN_LOCK:

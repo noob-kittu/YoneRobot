@@ -69,10 +69,7 @@ def cb_sticker(update: Update, context: CallbackContext):
     if len(query) > 50:
         msg.reply_text("Provide a search query under 50 characters")
         return
-    if msg.from_user:
-        user_id = msg.from_user.id
-    else:
-        user_id = None
+    user_id = msg.from_user.id if msg.from_user else None
     text, buttons = get_cbs_data(query, 1, user_id)
     msg.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=buttons)
 
@@ -92,11 +89,11 @@ def cbs_callback(update: Update, context: CallbackContext):
 
 
 def getsticker(update: Update, context: CallbackContext):
-    bot = context.bot
     msg = update.effective_message
-    chat_id = update.effective_chat.id
     if msg.reply_to_message and msg.reply_to_message.sticker:
         file_id = msg.reply_to_message.sticker.file_id
+        bot = context.bot
+        chat_id = update.effective_chat.id
         with BytesIO() as file:
             file.name = 'sticker.png'
             new_file = bot.get_file(file_id)

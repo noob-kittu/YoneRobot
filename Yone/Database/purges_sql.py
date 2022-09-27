@@ -16,7 +16,7 @@ class Purges(BASE):
 
 
     def __repr__(self):
-        return "<Purges %s>" % self.chat_id
+        return f"<Purges {self.chat_id}>"
 
 
 Purges.__table__.create(checkfirst=True)
@@ -37,8 +37,7 @@ def is_purgefrom(chat_id, message_from):
 
 def clear_purgefrom(chat_id, message_from):
     with PURGES_INSERTION_LOCK:
-        note = SESSION.query(Purges).get((str(chat_id), message_from))
-        if note:
+        if note := SESSION.query(Purges).get((str(chat_id), message_from)):
             SESSION.delete(note)
             SESSION.commit()
             return True

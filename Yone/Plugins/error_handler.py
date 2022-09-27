@@ -58,29 +58,11 @@ def error_callback(update: Update, context: CallbackContext):
         None, context.error, context.error.__traceback__,
     )
     tb = "".join(tb_list)
-    pretty_message = (
-        "{}\n"
-        "-------------------------------------------------------------------------------\n"
-        "An exception was raised while handling an update\n"
-        "User: {}\n"
-        "Chat: {} {}\n"
-        "Callback data: {}\n"
-        "Message: {}\n\n"
-        "Full Traceback: {}"
-    ).format(
-            pretty_error.replace(context.bot.token, "$TOKEN").replace(str(API_ID), "$API_ID").replace(API_HASH, "$API_HASH"), #.replace(SPAMWATCH_API, "$SPAMWATCH_API"),
-        update.effective_user.id,
-        update.effective_chat.title if update.effective_chat else "",
-        update.effective_chat.id if update.effective_chat else "",
-        update.callback_query.data if update.callback_query else "None",
-        update.effective_message.text if update.effective_message else "No message",
-        tb,
-    )
-    data = str(pretty_message)
+    pretty_message = f'{pretty_error.replace(context.bot.token, "$TOKEN").replace(str(API_ID), "$API_ID").replace(API_HASH, "$API_HASH")}\n-------------------------------------------------------------------------------\nAn exception was raised while handling an update\nUser: {update.effective_user.id}\nChat: {update.effective_chat.title if update.effective_chat else ""} {update.effective_chat.id if update.effective_chat else ""}\nCallback data: {update.callback_query.data if update.callback_query else "None"}\nMessage: {update.effective_message.text if update.effective_message else "No message"}\n\nFull Traceback: {tb}'
+
+    data = pretty_message
     uri = "https://spaceb.in/api/v1/documents"
-    cont = {}
-    cont['content']=data
-    cont['Extension']='py'
+    cont = {'content': data, 'Extension': 'py'}
     data = json.dumps(cont)
 
     headers = CaseInsensitiveDict()
@@ -115,9 +97,7 @@ def error_callback(update: Update, context: CallbackContext):
 def list_errors(update: Update, context: CallbackContext):
     if update.effective_user.id not in DEV_USERS:
         return
-    e = {
-        k: v for k, v in sorted(errors.items(), key=lambda item: item[1], reverse=True)
-    }
+    e = dict(sorted(errors.items(), key=lambda item: item[1], reverse=True))
     msg = "<b>Errors List:</b>\n"
     for x, value in e.items():
         msg += f'• <code>{x}:</code> <b>{value}</b> #{x.identifier}\n'
