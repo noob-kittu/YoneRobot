@@ -1,4 +1,3 @@
-from emoji import UNICODE_EMOJI
 #from google_trans_new import LANGUAGES, google_translator
 from telegram import  Update, ParseMode 
 from telegram.ext import run_async ,CallbackContext
