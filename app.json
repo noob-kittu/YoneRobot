@@ -65,7 +65,11 @@
        "description": "Your Telegram support group chat username where your users will go and bother you with shit But be like: MyGroupChatUsernameBlah. If this ever points to masha support than consider you made an enemy.",
        "required": true,
        "value": "league_of_bots"
-    },      
+    },    
+    "KORA_API_TOKEN": {
+      "description": "generate your kora api token from @Camille_Robot",
+      "value": ""
+   },  
     "PHOTO": {
        "description": "Your Telegram Bot Image (Add Link Only).",
        "required": true,

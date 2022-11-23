@@ -54,6 +54,7 @@ if ENV:
         raise Exception("Please Add Hash Api key to start the bot")
 
     DB_URI = os.environ.get("DATABASE_URL")
+    KORA_API_TOKEN = os.environ.get("KORA_API_TOKEN")
     PHOTO = os.environ.get("PHOTO")
     WORKERS = int(os.environ.get("WORKERS", 8))
     ALLOW_EXCL = os.environ.get('ALLOW_EXCL', False)
