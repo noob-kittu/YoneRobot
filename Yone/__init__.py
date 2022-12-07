@@ -30,7 +30,7 @@ if ENV:
     TOKEN = os.environ.get("TOKEN", None)
 
     try:
-        OWNER_ID = int(os.environ.get("OWNER_ID", None))
+        OWNER_ID = os.environ.get("OWNER_ID", None)
     except ValueError:
         raise Exception("Your OWNER_ID env variable is not a valid integer.")
     try:
@@ -54,6 +54,7 @@ if ENV:
         raise Exception("Please Add Hash Api key to start the bot")
 
     DB_URI = os.environ.get("DATABASE_URL")
+    KORA_API_TOKEN = os.environ.get("KORA_API_TOKEN")
     PHOTO = os.environ.get("PHOTO")
     WORKERS = int(os.environ.get("WORKERS", 8))
     ALLOW_EXCL = os.environ.get('ALLOW_EXCL', False)
