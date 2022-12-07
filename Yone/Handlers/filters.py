@@ -25,7 +25,7 @@ class CustomFilters(object):
     class _MimeType(MessageFilter):
         def __init__(self, mimetype):
             self.mime_type = mimetype
-            self.name = "CustomFilters.mime_type({})".format(self.mime_type)
+            self.name = f"CustomFilters.mime_type({self.mime_type})"
 
         def filter(self, message: Message):
             return bool(

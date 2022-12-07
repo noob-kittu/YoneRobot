@@ -45,9 +45,7 @@ def get_user_id(username):
                     return userdat.id
 
             except BadRequest as excp:
-                if excp.message == "Chat not found":
-                    pass
-                else:
+                if excp.message != "Chat not found":
                     LOGGER.exception("Error extracting user ID")
 
     return None
@@ -130,9 +128,7 @@ def chats(update: Update, context: CallbackContext):
             curr_chat = context.bot.getChat(chat.chat_id)
             bot_member = curr_chat.get_member(context.bot.id)
             chat_members = curr_chat.get_member_count(context.bot.id)
-            chatfile += "{}. {} | {} | {}\n".format(
-                P, chat.chat_name, chat.chat_id, chat_members
-            )
+            chatfile += f"{P}. {chat.chat_name} | {chat.chat_id} | {chat_members}\n"
             P = P + 1
         except:
             pass

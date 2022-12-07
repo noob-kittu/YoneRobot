@@ -33,9 +33,6 @@ def music(update: Update, context: CallbackContext):
     if len(args) == 1:
         message.reply_text('Provide Song Name also like `/song on my way`!')
         return
-    else:
-        pass
-
     urlissed = args[1]
 
     pablo = bot.send_message(
@@ -123,9 +120,6 @@ def video(update: Update, context: CallbackContext):
     if len(args) == 1:
         message.reply_text('Provide video Name also like `/video on my way`!')
         return
-    else:
-        pass
-
     urlissed = args[1]
 
     pablo = bot.send_message(

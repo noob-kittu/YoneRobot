@@ -14,8 +14,7 @@ def __list_all_modules():
     list_of_files = []
 
     for root, dirs, files in os.walk(path):
-        for file in files:
-            list_of_files.append(os.path.join(root,file))
+        list_of_files.extend(os.path.join(root,file) for file in files)
 # This generates a list of modules in this folder for the * in __help__ to work.
 
     all_modules = [

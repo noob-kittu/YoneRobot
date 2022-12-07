@@ -137,29 +137,24 @@ def reply_afk(update: Update, context: CallbackContext):
 
 
 def check_afk(update: Update, context: CallbackContext, user_id: int, fst_name: str, userc_id: int):
-    if sql.is_afk(user_id):
-        user = sql.check_afk_status(user_id)
-        if not user:
-            return
+    if not sql.is_afk(user_id):
+        return
+    user = sql.check_afk_status(user_id)
+    if not user:
+        return
 
-        if int(userc_id) == int(user_id):
-            return
+    if userc_id == user_id:
+        return
 
-        time = humanize.naturaldelta(datetime.now() - user.time)
+    time = humanize.naturaldelta(datetime.now() - user.time)
 
-        if not user.reason:
-            res = "{} is afk.\n\nLast seen {} ago.".format(
-                fst_name,
-                time,
-            )
-            update.effective_message.reply_text(res)
-        else:
-            res = "{} is afk.\nReason: <code>{}</code>\n\nLast seen {} ago.".format(
-                html.escape(fst_name),
-                html.escape(user.reason),
-                time,
-            )
-            update.effective_message.reply_text(res, parse_mode="html")
+    if not user.reason:
+        res = f"{fst_name} is afk.\n\nLast seen {time} ago."
+        update.effective_message.reply_text(res)
+    else:
+        res = f"{html.escape(fst_name)} is afk.\nReason: <code>{html.escape(user.reason)}</code>\n\nLast seen {time} ago."
+
+        update.effective_message.reply_text(res, parse_mode="html")
 
 
 AFK_HANDLER = DisableAbleCommandHandler("afk", afk, run_async=True)

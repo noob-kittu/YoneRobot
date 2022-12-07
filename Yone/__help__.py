@@ -12,8 +12,10 @@ from os.path import isfile
 
 HELP_STRINGS = """Hey there! My name is *{}*.
 I'm a modular group management bot with a few fun extras! Have a look at the following for an idea of some of the things I can help you with. """.format(
-    dispatcher.bot.first_name, ""
-    if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
+    dispatcher.bot.first_name,
+    "\nAll commands can either be used with / or !.\n" if ALLOW_EXCL else "",
+)
+
 
 IMPORTED = {}
 ADMIN_IMPORTED = {}
@@ -35,9 +37,7 @@ import os
 path =r'Yone/Plugins/'
 list_of_files = []
 for root, dirs, files in os.walk(path):
-    for file in files:
-        list_of_files.append(os.path.join(root,file))
-
+    list_of_files.extend(os.path.join(root,file) for file in files)
 mod_name = [
         name[:-3].replace("/", ".").replace("\\", ".")
         for name in list_of_files

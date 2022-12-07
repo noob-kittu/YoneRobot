@@ -85,42 +85,35 @@ def markdown_parser(
         start = ent.offset + offset  # start of entity
         end = ent.offset + offset + ent.length - 1  # end of entity
 
-        # we only care about code, url, text links
-        if ent.type in ("code", "url", "text_link"):
-            # count emoji to switch counter
-            count = _calc_emoji_offset(txt[:start])
-            start -= count
-            end -= count
+        if ent.type not in ("code", "url", "text_link"):
+            continue
+
+        # count emoji to switch counter
+        count = _calc_emoji_offset(txt[:start])
+        start -= count
+        end -= count
 
             # URL handling -> do not escape if in [](), escape otherwise.
-            if ent.type == "url":
-                if any(
-                    match.start(1) <= start and end <= match.end(1)
-                    for match in LINK_REGEX.finditer(txt)
-                ):
-                    continue
-                # else, check the escapes between the prev and last and forcefully escape the url to avoid mangling
-                else:
-                    # TODO: investigate possible offset bug when lots of emoji are present
-                    res += _selective_escape(txt[prev:start] or "") + escape_markdown(
-                        ent_text
-                    )
-
-            # code handling
-            elif ent.type == "code":
-                res += _selective_escape(txt[prev:start]) + "`" + ent_text + "`"
-
-            # handle markdown/html links
-            elif ent.type == "text_link":
-                res += _selective_escape(txt[prev:start]) + "[{}]({})".format(
-                    ent_text, ent.url
+        if ent.type == "url":
+            if any(
+                match.start(1) <= start and end <= match.end(1)
+                for match in LINK_REGEX.finditer(txt)
+            ):
+                continue
+            # else, check the escapes between the prev and last and forcefully escape the url to avoid mangling
+            else:
+                # TODO: investigate possible offset bug when lots of emoji are present
+                res += _selective_escape(txt[prev:start] or "") + escape_markdown(
+                    ent_text
                 )
 
-            end += 1
+        elif ent.type == "code":
+            res += f"{_selective_escape(txt[prev:start])}`{ent_text}`"
 
-        # anything else
-        else:
-            continue
+        elif ent.type == "text_link":
+            res += f"{_selective_escape(txt[prev:start])}[{ent_text}]({ent.url})"
+
+        end += 1
 
         prev = end
 
@@ -153,8 +146,7 @@ def button_markdown_parser(
         else:
             note_data += markdown_note[prev:to_check]
             prev = match.start(1) - 1
-    else:
-        note_data += markdown_note[prev:]
+    note_data += markdown_note[prev:]
 
     return note_data, buttons
 
@@ -257,22 +249,21 @@ def extract_time(message, time_val):
             message.reply_text("Invalid time amount specified.")
             return ""
 
-        if unit == "m":
-            bantime = int(time.time() + int(time_num) * 60)
+        if unit == "d":
+            bantime = int(time.time() + int(time_num) * 24 * 60 * 60)
         elif unit == "h":
             bantime = int(time.time() + int(time_num) * 60 * 60)
-        elif unit == "d":
-            bantime = int(time.time() + int(time_num) * 24 * 60 * 60)
+        elif unit == "m":
+            bantime = int(time.time() + int(time_num) * 60)
         else:
             # how even...?
             return ""
         return bantime
     else:
         message.reply_text(
-            "Invalid time type specified. Expected m,h, or d, got: {}".format(
-                time_val[-1]
-            )
+            f"Invalid time type specified. Expected m,h, or d, got: {time_val[-1]}"
         )
+
         return ""
 
 

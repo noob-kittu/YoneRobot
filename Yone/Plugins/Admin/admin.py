@@ -42,7 +42,8 @@ def promote(update: Update, context: CallbackContext) -> str:
     promoter = chat.get_member(user.id)
 
     if (
-        not (promoter.can_promote_members or promoter.status == "creator")
+        not promoter.can_promote_members
+        and promoter.status != "creator"
         and user.id not in INSPECTOR
     ):
         message.reply_text("You don't have the necessary rights to do that!")
@@ -61,7 +62,7 @@ def promote(update: Update, context: CallbackContext) -> str:
     except:
         return
 
-    if user_member.status == "administrator" or user_member.status == "creator":
+    if user_member.status in ["administrator", "creator"]:
         message.reply_text("How am I meant to promote someone that's already an admin?")
         return
 
@@ -99,14 +100,7 @@ def promote(update: Update, context: CallbackContext) -> str:
         parse_mode=ParseMode.HTML,
     )
 
-    log_message = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"USER PROMOTED SUCCESSFULLY\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-        f"<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
-    )
-
-    return log_message
+    return f"<b>{html.escape(chat.title)}:</b>\nUSER PROMOTED SUCCESSFULLY\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
 
 
 @connection_status
@@ -125,7 +119,8 @@ def fullpromote(update: Update, context: CallbackContext) -> str:
     promoter = chat.get_member(user.id)
 
     if (
-        not (promoter.can_promote_members or promoter.status == "creator")
+        not promoter.can_promote_members
+        and promoter.status != "creator"
         and user.id not in INSPECTOR
     ):
         message.reply_text("You don't have the necessary rights to do that!")
@@ -144,7 +139,7 @@ def fullpromote(update: Update, context: CallbackContext) -> str:
     except:
         return
 
-    if user_member.status == "administrator" or user_member.status == "creator":
+    if user_member.status in ["administrator", "creator"]:
         message.reply_text("How am I meant to promote someone that's already an admin?")
         return
 
@@ -182,14 +177,7 @@ def fullpromote(update: Update, context: CallbackContext) -> str:
         parse_mode=ParseMode.HTML,
     )
 
-    log_message = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"USER PROMOTED SUCCESSFULLY\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-        f"<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
-    )
-
-    return log_message
+    return f"<b>{html.escape(chat.title)}:</b>\nUSER PROMOTED SUCCESSFULLY\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
 
 
 
@@ -222,7 +210,7 @@ def demote(update: Update, context: CallbackContext) -> str:
         message.reply_text("This person CREATED the chat, how would I demote them?")
         return
 
-    if not user_member.status == "administrator":
+    if user_member.status != "administrator":
         message.reply_text("Can't demote what wasn't promoted!")
         return
 
@@ -251,14 +239,8 @@ def demote(update: Update, context: CallbackContext) -> str:
             parse_mode=ParseMode.HTML,
         )
 
-        log_message = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"SUCCESSFULLY DEMOTED\n"
-            f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-            f"<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
-        )
+        return f"<b>{html.escape(chat.title)}:</b>\nSUCCESSFULLY DEMOTED\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
 
-        return log_message
     except BadRequest:
         message.reply_text(
             "Could not demote. I might not be admin, or the admin status was appointed by another"
@@ -411,7 +393,7 @@ def setchat_title(update, context):
         return
 
     try:
-        context.bot.set_chat_title(int(chat.id), str(title))
+        context.bot.set_chat_title(int(chat.id), title)
         msg.reply_text(
             f"Successfully set <b>{title}</b> as new chat title!",
             parse_mode=ParseMode.HTML,
@@ -490,20 +472,21 @@ def __chat_settings__(chat_id, user_id):
 @user_admin
 @loggable
 def pin(update: Update, context: CallbackContext) -> str:
-    bot = context.bot
-    args = context.args
-
-    user = update.effective_user
     chat = update.effective_chat
 
     is_group = chat.type not in ('private', 'channel')
     prev_message = update.effective_message.reply_to_message
 
-    is_silent = True
-    if len(args) >= 1:
-        is_silent = args[0].lower() in ('notify', 'loud', 'violent')
-
     if prev_message and is_group:
+        args = context.args
+
+        is_silent = (
+            args[0].lower() in ('notify', 'loud', 'violent')
+            if len(args) >= 1
+            else True
+        )
+
+        bot = context.bot
         try:
             bot.pinChatMessage(
                 chat.id,
@@ -513,13 +496,8 @@ def pin(update: Update, context: CallbackContext) -> str:
         except BadRequest as excp:
             if excp.message != "Chat_not_modified":
                 raise
-        log_message = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"#PINNED\n"
-            f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}"
-        )
-
-        return log_message
+        user = update.effective_user
+        return f"<b>{html.escape(chat.title)}:</b>\n#PINNED\n<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}"
 
 
  
@@ -535,18 +513,10 @@ def unpin(update: Update, context: CallbackContext) -> str:
     try:
         bot.unpinChatMessage(chat.id)
     except BadRequest as excp:
-        if excp.message == "Chat_not_modified":
-            pass
-        else:
+        if excp.message != "Chat_not_modified":
             raise
 
-    log_message = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"MESSAGE UNPINNED SUCCESSFULLY\n"
-        f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}"
-    )
-
-    return log_message
+    return f"<b>{html.escape(chat.title)}:</b>\nMESSAGE UNPINNED SUCCESSFULLY\n<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}"
 
 
 
@@ -578,8 +548,8 @@ def invite(update: Update, context: CallbackContext):
  
 @connection_status
 def adminlist(update, context):
-    chat = update.effective_chat  
-    user = update.effective_user 
+    chat = update.effective_chat
+    user = update.effective_user
     args = context.args
     bot = context.bot
 
@@ -601,7 +571,7 @@ def adminlist(update, context):
         )
 
     administrators = bot.getChatAdministrators(chat_id)
-    text = "Admins in <b>{}</b>:".format(html.escape(update.effective_chat.title))
+    text = f"Admins in <b>{html.escape(update.effective_chat.title)}</b>:"
 
     bot_admin_list = []
 
@@ -610,14 +580,11 @@ def adminlist(update, context):
         status = admin.status
         custom_title = admin.custom_title
 
-        if user.first_name == "":
-            name = "☠ Deleted Account"
-        else:
-            name = "{}".format(
-                mention_html(
-                    user.id, html.escape(user.first_name + " " + (user.last_name or ""))
-                )
-            )
+        name = (
+            "☠ Deleted Account"
+            if user.first_name == ""
+            else f'{mention_html(user.id, html.escape(f"{user.first_name} " + (user.last_name or "")))}'
+        )
 
         if user.is_bot:
             bot_admin_list.append(name)
@@ -628,7 +595,7 @@ def adminlist(update, context):
         #    name = escape_markdown("@" + user.username)
         if status == "creator":
             text += "\n 👑 Creator:"
-            text += "\n<code> • </code>{}\n".format(name)
+            text += f"\n<code> • </code>{name}\n"
 
             if custom_title:
                 text += f"<code> ┗━ {html.escape(custom_title)}</code>\n"
@@ -643,45 +610,40 @@ def adminlist(update, context):
         status = admin.status
         custom_title = admin.custom_title
 
-        if user.first_name == "":
-            name = "☠ Deleted Account"
-        else:
-            name = "{}".format(
-                mention_html(
-                    user.id, html.escape(user.first_name + " " + (user.last_name or ""))
-                )
-            )
-        # if user.username:
-        #    name = escape_markdown("@" + user.username)
+        name = (
+            "☠ Deleted Account"
+            if user.first_name == ""
+            else f'{mention_html(user.id, html.escape(f"{user.first_name} " + (user.last_name or "")))}'
+        )
+
         if status == "administrator":
             if custom_title:
                 try:
                     custom_admin_list[custom_title].append(name)
                 except KeyError:
-                    custom_admin_list.update({custom_title: [name]})
+                    custom_admin_list[custom_title] = [name]
             else:
                 normal_admin_list.append(name)
 
     for admin in normal_admin_list:
-        text += "\n<code> • </code>{}".format(admin)
+        text += f"\n<code> • </code>{admin}"
 
     for admin_group in custom_admin_list.copy():
         if len(custom_admin_list[admin_group]) == 1:
-            text += "\n<code> • </code>{} | <code>{}</code>".format(
-                custom_admin_list[admin_group][0], html.escape(admin_group)
-            )
+            text += f"\n<code> • </code>{custom_admin_list[admin_group][0]} | <code>{html.escape(admin_group)}</code>"
+
             custom_admin_list.pop(admin_group)
 
     text += "\n"
     for admin_group, value in custom_admin_list.items():
-        text += "\n🚨 <code>{}</code>".format(admin_group)
+        text += f"\n🚨 <code>{admin_group}</code>"
         for admin in value:
-            text += "\n<code> • </code>{}".format(admin)
+            text += f"\n<code> • </code>{admin}"
         text += "\n"
 
     text += "\n🤖 Bots:"
     for each_bot in bot_admin_list:
-        text += "\n<code> • </code>{}".format(each_bot)
+        text += f"\n<code> • </code>{each_bot}"
 
     try:
         msg.edit_text(text, parse_mode=ParseMode.HTML)
@@ -720,27 +682,18 @@ def unpinallbtn(update: Update, context: CallbackContext):
     reply = query.data.split("_")[1]
     if reply == 'yes':
         try:
-            unpinned =  bot.unpinAllChatMessages(chat.id)
-            if unpinned:
+            if unpinned := bot.unpinAllChatMessages(chat.id):
                 query.message.edit_text("Successfully unpinned all messages!")
             else:
                 query.message.edit_text("Failed to unpin all messages")
         except BadRequest as excp:
-            if excp.message == "Chat_not_modified":
-                pass
-            else:
+            if excp.message != "Chat_not_modified":
                 raise
-        
+
     else:
         query.message.edit_text("Unpin of all pinned messages has been cancelled.")
         return
-    log_message = "<b>{}:</b>" \
-                  "\n#UNPINNEDALL" \
-                  "\n<b>Admin:</b> {}".format(
-                      html.escape(chat.title),
-                      mention_html(user.id, user.first_name),
-                  )
-    return log_message
+    return f"<b>{html.escape(chat.title)}:</b>\n#UNPINNEDALL\n<b>Admin:</b> {mention_html(user.id, user.first_name)}"
 
 __help__ = """
 Admins Play Major Roles To Manage A Group, We Have Created Some Hack Command In Our Bot So It Will Help To Manage Group Easily Via Bot.

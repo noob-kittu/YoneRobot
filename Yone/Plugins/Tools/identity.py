@@ -37,12 +37,10 @@ def fakeid(update: Update, context: CallbackContext):
 def astro(update: Update, context: CallbackContext):
     message = update.effective_message
     args = message.text.split(" ", 1)
-    
+
     if len(args) == 1:
         message.reply_text('Please choose your horoscope sign. List of all signs - aries, taurus, gemini, cancer, leo, virgo, libra, scorpio, sagittarius, capricorn, aquarius and pisces.')
         return
-    else:
-        pass
     msg = message.reply_text("Fetching data...")
     try:
         x = args[1]

@@ -75,24 +75,11 @@ def hpmanager(user):
             afkst = check_afk_status(user.id)
             # if user is afk and no reason then decrease 7%
             # else if reason exist decrease 5%
-            if not afkst.reason:
-                new_hp -= no_by_per(total_hp, 7)
-            else:
-                new_hp -= no_by_per(total_hp, 5)
-
-        # fbanned users will have (2*number of fbans) less from max HP
-        # Example: if HP is 100 but user has 5 diff fbans
-        # Available HP is (2*5) = 10% less than Max HP
-        # So.. 10% of 100HP = 90HP
-
-    # Commenting out fban health decrease cause it wasnt working and isnt needed ig.
-    # _, fbanlist = get_user_fbanlist(user.id)
-    # new_hp -= no_by_per(total_hp, 2 * len(fbanlist))
-
-    # Bad status effects:
-    # gbanned users will always have 5% HP from max HP
-    # Example: If HP is 100 but gbanned
-    # Available HP is 5% of 100 = 5HP
+            new_hp -= no_by_per(total_hp, 5) if afkst.reason else no_by_per(total_hp, 7)
+            # fbanned users will have (2*number of fbans) less from max HP
+            # Example: if HP is 100 but user has 5 diff fbans
+            # Available HP is (2*5) = 10% less than Max HP
+            # So.. 10% of 100HP = 90HP
 
     else:
         new_hp = no_by_per(total_hp, 5)
@@ -115,10 +102,7 @@ def get_id(update: Update, context: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
     msg = update.effective_message
-    user_id = extract_user(msg, args)
-
-    if user_id:
-
+    if user_id := extract_user(msg, args):
         if msg.reply_to_message and msg.reply_to_message.forward_from:
 
             user1 = message.reply_to_message.from_user
@@ -139,17 +123,15 @@ def get_id(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.HTML,
             )
 
+    elif chat.type == "private":
+        msg.reply_text(
+            f"Your id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML
+        )
+
     else:
-
-        if chat.type == "private":
-            msg.reply_text(
-                f"Your id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML
-            )
-
-        else:
-            msg.reply_text(
-                f"This group's id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML
-            )
+        msg.reply_text(
+            f"This group's id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML
+        )
 
 
 @user_admin
@@ -157,62 +139,62 @@ def get_id(update: Update, context: CallbackContext):
 def group_info(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     message = update.effective_message
-    chat = update.effective_chat
-
     if args and len(args) >= 1:
+        try:
+            connect_chat = int(args[0])
+
+        except ValueError:
             try:
-                connect_chat = int(args[0])
+                connect_chat = str(args[0])
+                get_chat = context.bot.getChat(connect_chat)
+                connect_chat = get_chat.id
 
-            except ValueError:
-                try:
-                    connect_chat = str(args[0])
-                    get_chat = context.bot.getChat(connect_chat)
-                    connect_chat = get_chat.id
-
-                except BadRequest:
-                    bot.send_message(update.effective_message, "Invalid Chat ID!")
-                    return
             except BadRequest:
                 bot.send_message(update.effective_message, "Invalid Chat ID!")
                 return
-            entity = bot.get_chat(connect_chat)
-            totaladmin = bot.get_chat_administrators(entity.id)
-            msg = f"*Group info of* - `{entity.title}`\n" 
-            msg += f"\n*ID*: `{entity.id}`"
-            msg += f"\n*Title*: `{entity.title}`"
-            msg += f"\n*Description*: `{entity.description}`"
-            msg += f"\n*Supergroup*: `{entity.type}`"
-            msg += f"\n*Can Send*: `{entity.permissions.can_send_messages}`"
-            msg += f"\n*Bio*: `{entity.bio}`"
-            msg += f"\n*Slowmode*: `{entity.slow_mode_delay}`"
-            msg += f"\n*Location*: `{entity.location}`"
-            if entity.username:
-                msg += f"\n**Username*: @{entity.username}"
-            msg += "\n\n*Member Stats:*"
-            msg += f"\n`Admins:` `{len(totaladmin)}`"
-            if entity.invite_link:
-                msg += f"\n*Link*: {entity.invite_link}"
-            message.reply_text(msg, parse_mode=ParseMode.HTML)
+        except BadRequest:
+            bot.send_message(update.effective_message, "Invalid Chat ID!")
+            return
+        entity = bot.get_chat(connect_chat)
+        totaladmin = bot.get_chat_administrators(entity.id)
+        msg = f"*Group info of* - `{entity.title}`\n" 
+        msg += f"\n*ID*: `{entity.id}`"
+        msg += f"\n*Title*: `{entity.title}`"
+        msg += f"\n*Description*: `{entity.description}`"
+        msg += f"\n*Supergroup*: `{entity.type}`"
+        msg += f"\n*Can Send*: `{entity.permissions.can_send_messages}`"
+        msg += f"\n*Bio*: `{entity.bio}`"
+        msg += f"\n*Slowmode*: `{entity.slow_mode_delay}`"
+        msg += f"\n*Location*: `{entity.location}`"
+        if entity.username:
+            msg += f"\n**Username*: @{entity.username}"
+        msg += "\n\n*Member Stats:*"
+        msg += f"\n`Admins:` `{len(totaladmin)}`"
+        if entity.invite_link:
+            msg += f"\n*Link*: {entity.invite_link}"
+        message.reply_text(msg, parse_mode=ParseMode.HTML)
 
     else:
-            entity = bot.get_chat(chat.id)
-            totaladmin = bot.get_chat_administrators(entity.id)
-            msg = f"**Group info of** - `{entity.title}`\n" 
-            msg += f"\n**ID**: `{entity.id}`"
-            msg += f"\n**Title**: `{entity.title}`"
-            msg += f"\n**Description**: `{entity.description}`"
-            msg += f"\n**Supergroup**: `{entity.type}`"
-            msg += f"\n**Can Send**: `{entity.permissions.can_send_messages}`"
-            msg += f"\n**Bio**: `{entity.bio}`"
-            msg += f"\n**Slowmode**: `{entity.slow_mode_delay}`"
-            msg += f"\n**Location**: `{entity.location}`"
-            if entity.username:
-                msg += f"\n**Username**: {entity.username}"
-            msg += "\n\n**Member Stats:**"
-            msg += f"\n`Admins:` `{len(totaladmin)}`"
-            if entity.invite_link:
-                msg += f"\n**Link**: {entity.invite_link}"
-            message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+        chat = update.effective_chat
+
+        entity = bot.get_chat(chat.id)
+        totaladmin = bot.get_chat_administrators(entity.id)
+        msg = f"**Group info of** - `{entity.title}`\n"
+        msg += f"\n**ID**: `{entity.id}`"
+        msg += f"\n**Title**: `{entity.title}`"
+        msg += f"\n**Description**: `{entity.description}`"
+        msg += f"\n**Supergroup**: `{entity.type}`"
+        msg += f"\n**Can Send**: `{entity.permissions.can_send_messages}`"
+        msg += f"\n**Bio**: `{entity.bio}`"
+        msg += f"\n**Slowmode**: `{entity.slow_mode_delay}`"
+        msg += f"\n**Location**: `{entity.location}`"
+        if entity.username:
+            msg += f"\n**Username**: {entity.username}"
+        msg += "\n\n**Member Stats:**"
+        msg += f"\n`Admins:` `{len(totaladmin)}`"
+        if entity.invite_link:
+            msg += f"\n**Link**: {entity.invite_link}"
+        message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
  
@@ -274,8 +256,7 @@ def info(update: Update, context: CallbackContext):
     if chat.type != "private" and user_id != bot.id:
         _stext = "\n┣|• Presence: <code>{}</code>"
 
-        afk_st = is_afk(user.id)
-        if afk_st:
+        if afk_st := is_afk(user.id):
             text += _stext.format("AFK")
         else:
             status = status = bot.get_chat_member(chat.id, user.id).status
@@ -341,7 +322,7 @@ def info(update: Update, context: CallbackContext):
                 IPHOTO,
                 caption=(text),
                 parse_mode=ParseMode.HTML,
-                
+
             )
 
             os.remove(f"{user.id}.png")
@@ -363,20 +344,16 @@ def info(update: Update, context: CallbackContext):
 def about_me(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     message = update.effective_message
-    user_id = extract_user(message, args)
-
-    if user_id:
+    if user_id := extract_user(message, args):
         user = bot.get_chat(user_id)
     else:
         user = message.from_user
 
-    info = sql.get_user_me_info(user.id)
-
-    if info:
+    if info := sql.get_user_me_info(user.id):
         update.effective_message.reply_text(
             f"*{user.first_name}*:\n{escape_markdown(info)}",
             parse_mode=ParseMode.MARKDOWN,
-            
+
         )
     elif message.reply_to_message:
         username = message.reply_to_message.from_user.first_name
@@ -413,9 +390,7 @@ def set_about_me(update: Update, context: CallbackContext):
                 message.reply_text("Information updated!")
         else:
             message.reply_text(
-                "The info needs to be under {} characters! You have {}.".format(
-                    MAX_MESSAGE_LENGTH // 4, len(info[1])
-                )
+                f"The info needs to be under {MAX_MESSAGE_LENGTH // 4} characters! You have {len(info[1])}."
             )
 
 
@@ -433,20 +408,17 @@ def about_bio(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     message = update.effective_message
 
-    user_id = extract_user(message, args)
-    if user_id:
+    if user_id := extract_user(message, args):
         user = bot.get_chat(user_id)
     else:
         user = message.from_user
 
-    info = sql.get_user_bio(user.id)
-
-    if info:
+    if info := sql.get_user_bio(user.id):
         update.effective_message.reply_text(
-            "*{}*:\n{}".format(user.first_name, escape_markdown(info)),
+            f"*{user.first_name}*:\n{escape_markdown(info)}",
             parse_mode=ParseMode.MARKDOWN,
-            
         )
+
     elif message.reply_to_message:
         username = user.first_name
         update.effective_message.reply_text(
@@ -492,15 +464,12 @@ def set_about_bio(update: Update, context: CallbackContext):
         if len(bio) == 2:
             if len(bio[1]) < MAX_MESSAGE_LENGTH // 4:
                 sql.set_user_bio(user_id, bio[1])
-                message.reply_text(
-                    "Updated {}'s bio!".format(repl_message.from_user.first_name)
-                )
+                message.reply_text(f"Updated {repl_message.from_user.first_name}'s bio!")
             else:
                 message.reply_text(
-                    "Bio needs to be under {} characters! You tried to set {}.".format(
-                        MAX_MESSAGE_LENGTH // 4, len(bio[1])
-                    )
+                    f"Bio needs to be under {MAX_MESSAGE_LENGTH // 4} characters! You tried to set {len(bio[1])}."
                 )
+
     else:
         message.reply_text("Reply to someone to set their bio!")
 

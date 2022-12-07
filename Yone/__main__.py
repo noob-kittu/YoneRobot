@@ -75,7 +75,7 @@ def get_readable_time(seconds: int) -> str:
     for x in range(len(time_list)):
         time_list[x] = str(time_list[x]) + time_suffix_list[x]
     if len(time_list) == 4:
-        ping_time += time_list.pop() + ", "
+        ping_time += f"{time_list.pop()}, "
 
     time_list.reverse()
     ping_time += ":".join(time_list)
@@ -147,74 +147,74 @@ def start(update: Update, context: CallbackContext):
 
             elif args[0].lower().startswith("stngs_"):
                 match = re.match("stngs_(.*)", args[0].lower())
-                chat = dispatcher.bot.getChat(match.group(1))
+                chat = dispatcher.bot.getChat(match[1])
 
                 if is_user_admin(chat, update.effective_user.id):
-                    send_settings(match.group(1), update.effective_user.id, False)
+                    send_settings(match[1], update.effective_user.id, False)
                 else:
-                    send_settings(match.group(1), update.effective_user.id, True)
+                    send_settings(match[1], update.effective_user.id, True)
 
             elif args[0][1:].isdigit() and "rules" in IMPORTED:
                 IMPORTED["rules"].send_rules(update, args[0], from_pm=True)
 
         else:
-            update.effective_message.reply_text(
-                PM_START_TEXT.format(
-                        escape_markdown(first_name), escape_markdown(context.bot.first_name)),
-                reply_markup=InlineKeyboardMarkup([
-    [
-        InlineKeyboardButton(
-            text="➕️ Add me to your chat ➕️", url=f"https://t.me/{context.bot.username}?startgroup=true"),
-    ],
-    [
-        InlineKeyboardButton(text="Admin", callback_data="admin_back"),
-        InlineKeyboardButton(
-            text="Users", callback_data="user_back"
-        ),
-    ],
-    [
-        InlineKeyboardButton(text="Tools", callback_data="tools_back"),
-        InlineKeyboardButton(
-            text="Bot Info", callback_data="yone_"
-        ),
-    ],
-    [
-        InlineKeyboardButton(text="Helps & Commands❔", callback_data="help_back"),
-    ],
-]),
-                parse_mode=ParseMode.MARKDOWN,
-                timeout=60,
-            )
-    else:
-            text = (
-                f"Hello {mention_html(user.id, user.first_name)}, I'm {bot.first_name}\n\n"
-                f"┏━━━━━━━━━━━━━━━━━━━\n"
-                f"┣[• Owner : @{OWNER_USERNAME}  \n"
-                f"┣[• Uptime : {uptime} \n"
-                f"┣[• Core : {psutil.cpu_percent()}%\n"
-                f"┣[• Python   : Ver {python_version()} \n"
-                f"┗━━━━━━━━━━━━━━━━━━━")
-        
-
-            keyboard = InlineKeyboardMarkup([
+                        update.effective_message.reply_text(
+                            PM_START_TEXT.format(
+                                    escape_markdown(first_name), escape_markdown(context.bot.first_name)),
+                            reply_markup=InlineKeyboardMarkup([
                 [
                     InlineKeyboardButton(
-                        text="SUPPORT", 
-                        url=f"https://t.me/{SUPPORT_CHAT}"),
-                    InlineKeyboardButton(
-                        text="DEVLOPER", 
-                        url=f"https://t.me/{OWNER_USERNAME}")
-                    
+                        text="➕️ Add me to your chat ➕️", url=f"https://t.me/{context.bot.username}?startgroup=true"),
                 ],
-                
-                ])
-            message.reply_photo(
-                        PHOTO,
-                        caption=(text),
-                        reply_markup=keyboard,
-                        parse_mode=ParseMode.HTML,
-                        
-                    )
+                [
+                    InlineKeyboardButton(text="Admin", callback_data="admin_back"),
+                    InlineKeyboardButton(
+                        text="Users", callback_data="user_back"
+                    ),
+                ],
+                [
+                    InlineKeyboardButton(text="Tools", callback_data="tools_back"),
+                    InlineKeyboardButton(
+                        text="Bot Info", callback_data="yone_"
+                    ),
+                ],
+                [
+                    InlineKeyboardButton(text="Helps & Commands❔", callback_data="help_back"),
+                ],
+            ]),
+                            parse_mode=ParseMode.MARKDOWN,
+                            timeout=60,
+                        )
+    else:
+        text = (
+            f"Hello {mention_html(user.id, user.first_name)}, I'm {bot.first_name}\n\n"
+            f"┏━━━━━━━━━━━━━━━━━━━\n"
+            f"┣[• Owner : @{OWNER_USERNAME}  \n"
+            f"┣[• Uptime : {uptime} \n"
+            f"┣[• Core : {psutil.cpu_percent()}%\n"
+            f"┣[• Python   : Ver {python_version()} \n"
+            f"┗━━━━━━━━━━━━━━━━━━━")
+
+
+        keyboard = InlineKeyboardMarkup([
+            [
+                InlineKeyboardButton(
+                    text="SUPPORT", 
+                    url=f"https://t.me/{SUPPORT_CHAT}"),
+                InlineKeyboardButton(
+                    text="DEVLOPER", 
+                    url=f"https://t.me/{OWNER_USERNAME}")
+
+            ],
+
+            ])
+        message.reply_photo(
+                    PHOTO,
+                    caption=(text),
+                    reply_markup=keyboard,
+                    parse_mode=ParseMode.HTML,
+
+                )
 
                 
 
@@ -332,16 +332,16 @@ def main():
         LOGGER.info("Using long polling.")
         updater.start_polling(allowed_updates=Update.ALL_TYPES, timeout=15, read_latency=4, drop_pending_updates=True)
 
-    if len(argv) not in (1, 3, 4):
-        telethn.disconnect()
-    else:
+    if len(argv) in {1, 3, 4}:
         telethn.run_until_disconnected()
 
+    else:
+        telethn.disconnect()
     updater.idle()
 
 
 
 if __name__ == "__main__":
-    LOGGER.info("Successfully loaded modules: " + str(ALL_MODULES))
+    LOGGER.info(f"Successfully loaded modules: {str(ALL_MODULES)}")
     telethn.start(bot_token=TOKEN)
     main()

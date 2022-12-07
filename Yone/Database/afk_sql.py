@@ -57,8 +57,7 @@ def set_afk(user_id, reason=""):
 
 def rm_afk(user_id):
     with INSERTION_LOCK:
-        curr = SESSION.query(AFK).get(user_id)
-        if curr:
+        if curr := SESSION.query(AFK).get(user_id):
             if user_id in AFK_USERS:  # sanity check
                 del AFK_USERS[user_id]
 
@@ -77,7 +76,7 @@ def toggle_afk(user_id, reason=""):
             curr = AFK(user_id, reason, True)
         elif curr.is_afk:
             curr.is_afk = False
-        elif not curr.is_afk:
+        else:
             curr.is_afk = True
         SESSION.add(curr)
         SESSION.commit()

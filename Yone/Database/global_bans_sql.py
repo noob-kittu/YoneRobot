@@ -16,7 +16,7 @@ class GloballyBannedUsers(BASE):
         self.reason = reason
 
     def __repr__(self):
-        return "<GBanned User {} ({})>".format(self.name, self.user_id)
+        return f"<GBanned User {self.name} ({self.user_id})>"
 
     def to_dict(self):
         return {
@@ -36,7 +36,7 @@ class GbanSettings(BASE):
         self.setting = enabled
 
     def __repr__(self):
-        return "<Gban setting {} ({})>".format(self.chat_id, self.setting)
+        return f"<Gban setting {self.chat_id} ({self.setting})>"
 
 
 GloballyBannedUsers.__table__.create(checkfirst=True)
@@ -78,8 +78,7 @@ def update_gban_reason(user_id, name, reason=None):
 
 def ungban_user(user_id):
     with GBANNED_USERS_LOCK:
-        user = SESSION.query(GloballyBannedUsers).get(user_id)
-        if user:
+        if user := SESSION.query(GloballyBannedUsers).get(user_id):
             SESSION.delete(user)
 
         SESSION.commit()
@@ -161,8 +160,7 @@ def __load_gban_stat_list():
 
 def migrate_chat(old_chat_id, new_chat_id):
     with GBAN_SETTING_LOCK:
-        chat = SESSION.query(GbanSettings).get(str(old_chat_id))
-        if chat:
+        if chat := SESSION.query(GbanSettings).get(str(old_chat_id)):
             chat.chat_id = new_chat_id
             SESSION.add(chat)
 
